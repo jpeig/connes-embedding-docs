@@ -178,10 +178,10 @@ each deserves its own citation rather than a collective label:</p>
 </table>
 <p>Two points a referee should know. First, the u.c.p. requirement in the last row is exactly what
 <code>IsAmenableTraceUCP</code> encodes, so the premise assumes the literature's notion and not a stronger
-one; the repository's second, coarser axiom <code>kirchberg_game_separation</code> (in
-<code>KirchbergAxiom.lean</code>, feeding only the earlier packaging <code>cep_false_operator_algebraic</code>) uses a
-non-u.c.p. notion of amenable trace, which is a <em>stronger</em> assumption than the cited results
-supply — which is why the headline theorem uses the structured form above and not that one.
+one. An earlier packaging of this development assumed a <em>non</em>-u.c.p. notion of amenable trace,
+which is strictly stronger than the cited results supply; that axiom and the theorem it fed have
+been removed rather than documented, so the statement above is the <strong>only</strong> <code>axiom</code> declaration
+in the repository — a claim worth checking with <code>grep -rn "^axiom" ZFib</code>, which returns one line.
 Second, the trace is asserted to live on the universal free product <code>C*(F(n,m))</code> itself rather
 than on a game-specific quotient; that is the form Kim–Paulsen–Schafhauser's Thm 3.6 states, so
 it tracks the literature rather than strengthening it.</p>
@@ -440,7 +440,7 @@ lake env lean scripts/AxiomCheck.lean
 </code></pre>
 <p>The third prints the certificates and fails if the main theorem's list ever differs from the
 four entries in §3 — and likewise for the truncation certificates of §7 — so those lists are
-invariants rather than claims in prose.</p>
+invariants rather than claims in prose. <code>grep -rn "^axiom" ZFib</code> returns a single line.</p>
 <p>Checked against Lean <code>v4.30.0-rc2</code> and Mathlib <code>1a5bbc7d3785</code>.</p>
 <hr />
 <h2>9. Notes</h2>
@@ -450,7 +450,7 @@ imported modules. The objects this subject needs and Mathlib does not contain ar
 here: Connes embeddability and the tracial matrix ultrapower, tracial states, the universal
 measurement algebra structure, u.c.p.-amenable traces, the Boca dilation and its permanence
 estimates, flexible HS-stability, the Bass–Serre amalgam data, and the <code>ℓ²(ℕ)</code> truncation
-substrate. That is 903 theorems, 114 lemmas, 552 definitions and 57 structures across 214
+substrate. That is 900 theorems, 114 lemmas, 552 definitions and 57 structures across 213
 files, over 74 imported Mathlib modules.</p>
 <p>The <code>fib</code> and <code>ZFib</code> name prefixes are a namespace convention and carry no mathematical
 content. Only <code>theorem</code> and <code>def</code> statements are load-bearing; the certificates are the arbiter
