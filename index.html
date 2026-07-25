@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The negative Connes Embedding Problem, machine-checked, with the complexity-theoretic input isolated as a single axiom</title><link rel="stylesheet" href="style.css"><link rel="icon" href="favicon.svg"><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The negative Connes Embedding Problem, machine-checked, with the complexity-theoretic input isolated as a single premise</title><link rel="stylesheet" href="style.css"><link rel="icon" href="favicon.svg"><style>
 .landing{max-width:52em;margin:0 auto;padding:2rem 1.25rem 5rem;line-height:1.6}
 .landing h1{line-height:1.2;margin-bottom:.6rem}
 .landing h2{margin-top:2.2rem;padding-bottom:.3rem;border-bottom:1px solid rgba(128,128,128,.3)}
@@ -12,147 +12,191 @@
 .landing .apibar a{font-weight:600}
 .landing .note{font-size:.92em;opacity:.85}
 </style></head>
-<body><main class="landing"><h1>The negative Connes Embedding Problem, machine-checked, with the complexity-theoretic input isolated as a single axiom</h1>
+<body><main class="landing"><h1>The negative Connes Embedding Problem, machine-checked, with the complexity-theoretic input isolated as a single premise</h1>
 <div class="apibar"><span><strong>Machine-checked Lean 4 formalization.</strong> Every declaration below is verified by the proof kernel.</span><a href="api.html">Browse the API &rarr;</a></div><p class="note"><em>The source repository is private; access on request (jorrit@yom.net). These pages show declaration statements and documentation, and are generated from the sources by doc-gen4.</em></p>
-<p><strong>The entire operator-algebraic reduction — from a synchronous-game separation down to a
-tracial state that admits no trace-preserving embedding into a matrix ultrapower — is
-verified by the Lean 4 proof kernel against Mathlib. The one input from outside operator
-algebra, the MIP*=RE game separation, is isolated as a single named statement, and the
-kernel certifies that it is the only assumption beyond the logic itself.</strong></p>
+<p><strong>The operator-algebraic implication — from a structured synchronous-game premise to a tracial
+state admitting no trace-preserving embedding into a matrix ultrapower — is verified by the
+Lean 4 kernel against Mathlib. Its list of assumptions contains <code>propext</code>,
+<code>Classical.choice</code>, <code>Quot.sound</code>, and exactly one domain-specific premise,
+<code>kirchberg_game_separation_ucp_structured</code>. It contains no <code>sorryAx</code>.</strong></p>
+<p><strong>Proof status, in four lines.</strong></p>
+<ul>
+<li><strong>Main theorem</strong> (§3): proved from Lean's three standard Mathlib axioms and the single
+  domain-specific premise; no <code>sorryAx</code>.</li>
+<li><strong>That premise</strong>: its complete formal statement is printed in §3. It is not proved here.</li>
+<li><strong>Spectral truncations</strong> (§7): independent of CEP; the finite-dimensional statements listed
+  there use no domain-specific premise. Their continuations are not proved.</li>
+<li><strong>Complexity-free routes</strong> (§4–§6): separate from the main theorem, and dependent on
+  <code>sorryAx</code> through the declarations named in §5.</li>
+</ul>
 <hr />
-<h2>1. What is here</h2>
-<p>Since Ji–Natarajan–Vidick–Wright–Yuen (MIP*=RE, 2020) the Connes Embedding Problem is known
-to have a negative answer, but the decisive input comes from quantum complexity theory —
-a field away from the operator-algebra community that owns the problem. To <em>use</em> ¬CEP one
-must take a long interactive-proof-theoretic construction on trust, and the
-operator-algebraic interface of the argument (the Kirchberg/Tsirelson passage, game algebras,
-amenable traces) has not been set down at a level of detail where each step can be inspected.</p>
-<p><strong>Where to start.</strong> Section 2 is one theorem and its four-line certificate; ten minutes.
-Section 8 is how to re-verify it yourself. For operator systems and spectral truncations,
-section 7 stands alone and is fully proved.</p>
-<p>Three things are set out here, and one is deliberately not claimed:</p>
-<ol>
-<li>
-<p><strong>The main result</strong> (section 2). The reduction from the game separation to a
-   non-embeddable tracial state is verified in full. The complexity-theoretic input enters at
-   exactly <strong>one named statement</strong> — an axiom recording what MIP*=RE provides — and the
-   kernel reports that nothing else beyond Lean's three standard axioms is assumed. The
-   dilation and lifting arguments, finite-dimensional liftability, free-product permanence,
-   the u.c.p. extraction and the final composition are all proved.</p>
-</li>
-<li>
-<p><strong>A complexity-free architecture, with its open cores named</strong> (section 4). Two reduction
-   chains toward ¬CEP that do not pass through MIP*=RE, through flexible Hilbert–Schmidt
-   stability and the Dogon–Vigdorovich obstruction, each open ingredient carried as an
-   explicit hypothesis rather than assumed silently.</p>
-</li>
-<li>
-<p><strong>Why the purely operator-algebraic routes fail</strong> (section 6). Each known attack on an
-   explicit non-hyperlinear group is dead, foreclosed, aimed at the wrong invariant, or
-   exactly as hard as ¬CEP itself.</p>
-</li>
-</ol>
-<p><strong>Section 7 is independent of all of this</strong>: a finite stage of the spectral-truncation
-program, at zero added axioms.</p>
+<h2>1. What this is for</h2>
+<p>The Connes Embedding Problem has had a negative answer since Ji–Natarajan–Vidick–Wright–Yuen
+proved MIP*=RE in 2020. The decisive argument is a construction about interactive proof
+systems, probabilistically checkable proofs and recursion theory. Its operator-algebraic
+consequence reaches the subject through the Kirchberg and Tsirelson correspondences,
+synchronous game algebras, amenable traces and u.c.p. lifting — and that passage has not been
+written out in a form where each step can be checked independently of the complexity-theoretic
+construction.</p>
+<p>This development addresses that in three specific ways.</p>
+<p><strong>The operator-algebraic implication is checkable in full.</strong> Every step from the premise to the
+non-embeddable tracial state — the dilation and lifting arguments, finite-dimensional
+liftability, free-product permanence, the u.c.p. extraction and the final composition — is
+re-checked by the kernel. The check is mechanical: it passes or it does not.</p>
+<p><strong>The dependence on complexity theory is one premise, and that premise is a formal object.</strong>
+It is printed in full in §3, so it can be read, criticized as a rendering of what MIP*=RE
+supplies, and — this is the point — <em>replaced</em>. A proof of that single statement yields a fully
+verified refutation of CEP with no further work, because everything beneath it is already
+checked. The distance from "¬CEP on trust" to "¬CEP verified" is exactly this one statement.</p>
+<p><strong>Where the difficulty sits is stated precisely.</strong> A complexity-free route needs an explicit
+non-hyperlinear group. §4 formalizes the reduction skeleton with its two open cores as named
+hypotheses, and §6 records exactly what the known attacks do and do not establish — so the
+difficulty is localized to statements one can quote.</p>
+<p><strong>What this does not do.</strong> It does not prove ¬CEP outright: the main theorem is conditional on
+the premise in §3 and says so. It does not reprove MIP*=RE. It does not show the
+complexity-free route succeeds.</p>
 <hr />
-<h2>2. The main theorem</h2>
+<h2>2. Verified, assumed, open — what each word means here</h2>
+<p>These are three separate axes, and a claim about one says nothing about the others. Since this
+development contains both a theorem with no gaps and twenty-two openly declared gaps, the
+distinction is worth stating exactly.</p>
+<p><strong>Verified</strong> means the kernel re-checked every inference. A Lean proof is not accepted because
+a program judged it plausible; it is re-checked by a small trusted core. If the development
+compiles, each <code>theorem</code> is a theorem of the ambient logic — <em>given the assumptions listed for
+it</em>.</p>
+<p><strong>Assumed</strong> means an <code>axiom</code>: an unproved formal premise. Assumptions are tracked and cannot be
+hidden. For any theorem <code>T</code>, <code>#print axioms T</code> reports the complete list of unproved statements
+its proof rests on, transitively; a premise used three layers down still appears. The list is
+computed by the system, not chosen by the author, so it cannot be shortened by omission.</p>
+<p>Such a list always contains <code>propext</code>, <code>Classical.choice</code> and <code>Quot.sound</code> — propositional
+extensionality, choice, and the soundness of quotients. These are assumptions, but they are the
+ambient logic of essentially every development built on Mathlib, and they are not assumptions
+about operator algebras. So the meaningful measure is not how few entries appear, but what the
+domain-specific ones say. Here there is exactly one, and it is the entire mathematical trust
+surface of the main theorem.</p>
+<p>A premise being <em>intended</em> to encode a cited theorem is a separate matter from its being
+correctly stated. Whether <code>kirchberg_game_separation_ucp_structured</code> faithfully renders what
+MIP*=RE supplies is a mathematical question about its statement, not something the kernel can
+answer — which is why it is printed in full rather than described.</p>
+<p><strong>Open</strong> means a <code>sorry</code>: an unfinished proof, declared as such. These are tracked the same
+way: anything depending on one reports <code>sorryAx</code>. That makes the reconciliation mechanical
+rather than a matter of assurance:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Verified</th>
+<th>Assumed</th>
+<th>Open</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Main theorem</strong> (§3)</td>
+<td>the whole implication</td>
+<td>one domain-specific premise</td>
+<td>nothing — its list contains no <code>sorryAx</code></td>
+</tr>
+<tr>
+<td><strong>Complexity-free routes</strong> (§4)</td>
+<td>the final composition terms</td>
+<td>nothing; the two cores are hypotheses, not premises</td>
+<td>the 22 declarations of §5, reached transitively as <code>sorryAx</code></td>
+</tr>
+<tr>
+<td><strong>Spectral truncations</strong> (§7)</td>
+<td>the statements listed there</td>
+<td>nothing beyond the ambient logic</td>
+<td>one named premise, used by none of those statements</td>
+</tr>
+</tbody>
+</table>
+<p>So the twenty-two gaps and the four-entry certificate are not in tension. The gaps belong to
+the exploratory routes, they are named individually in §5, and the main theorem's certificate
+is a mechanical proof that none of them can reach it. A gap in §4 is not a defect being
+managed; it is the frontier, written as a statement rather than an impression.</p>
+<p>One convention follows. The two open cores of §4 are carried as <strong>hypotheses</strong> of the displayed
+implications, so no theorem quietly acquires them: <code>qce_implies_cep_false</code> cannot be mistaken
+for a proof of ¬CEP, because its statement displays what it assumes.</p>
+<hr />
+<h2>3. The main theorem and its single premise</h2>
 <p>The statement, in
 <a href="ZFib/External/OperatorAlgebra/CEP/Faithful/FaithfulSingleCapstone.html"><code>FaithfulSingleCapstone.lean</code></a>:</p>
 <pre><code class="language-lean">theorem cep_false_operator_algebraic_single_scaffold :
     ZFib.CEP.ConnesNonEmbeddableWitness
 </code></pre>
 <p><code>ConnesNonEmbeddableWitness</code> asserts the existence of a C*-algebra carrying a tracial state
-that admits no trace-preserving embedding into a tracial matrix ultrapower — a witness
-refuting CEP. The predicate is not an abbreviation for something weaker: unfolded, it ends in
-matrix algebras, an ultrafilter, and an injective trace-preserving *-homomorphism, with the
-ultrapower pinned by an isomorphism to the concrete quotient of matrix sequences.</p>
-<p>The single assumed input is stated where the theorem uses it:</p>
-<pre><code class="language-lean">/-- **Structured MIP*=RE citation.** The KPS/JNVWY synchronous separation, repackaged to
-return the canonical universal measurement algebra with its `MeasurementAlgebraStructure`
-(faithful: the qc-model construction IS on `C*(F(n,m)) ≅ ∗ⁿ Cᵐ`) together with the absence
-of a u.c.p.-amenable (qa) trace. -/
-axiom kirchberg_game_separation_ucp_structured : ...
+that admits no trace-preserving embedding into a tracial matrix ultrapower. It is not an
+abbreviation for something weaker: unfolded, it ends in matrix algebras, an ultrafilter, and an
+injective trace-preserving *-homomorphism, with the ultrapower pinned by an isomorphism to the
+concrete quotient of matrix sequences. So a weak surrogate cannot pass for a refutation of CEP.</p>
+<p>The single domain-specific premise, in full:</p>
+<pre><code class="language-lean">axiom kirchberg_game_separation_ucp_structured :
+    ∃ (X : Type) (_hX : Fintype X) (m : ℕ) (_hm : Nonempty (Fin m))
+      (B : Type) (instCB : CStarAlgebra B) (instPO : PartialOrder B)
+      (instSOR : StarOrderedRing B)
+      (τ : @TracialState B instCB instPO instSOR)
+      (_S : @MeasurementAlgebraStructure X _hX m B instCB instPO instSOR),
+      ¬ @IsAmenableTraceUCP B instCB instPO instSOR τ
 </code></pre>
-<p>In words: there is a finite synchronous game whose quantum-commuting model lives on the
-universal measurement algebra — the n-fold free product of m-outcome PVM algebras,
-<code>C*(F(n,m)) ≅ ∗ⁿ Cᵐ</code> — whose canonical trace admits no u.c.p.-amenable approximation. This
-is the content MIP*=RE supplies through the synchronous-games literature. It is <em>stated</em>
-here, not proved, so that the boundary between verified operator algebra and cited complexity
-theory is one statement a reader can find by name.</p>
-<p>Everything downstream of it is verified, including <strong>free-product permanence of approximate
-u.c.p. liftability</strong> (Boca-dilation territory), proved internally as
-<code>bocaFreeProductPermanence_holds_internal</code>.</p>
+<p>Read out: there are a finite question set <code>X</code> and outcome count <code>m</code>, and a C*-algebra <code>B</code>
+carrying a tracial state <code>τ</code> and the structure of the universal measurement algebra on <code>X</code> and
+<code>m</code> — the n-fold free product of m-outcome PVM algebras, <code>C*(F(n,m)) ≅ ∗ⁿ Cᵐ</code> — such that <code>τ</code>
+admits no u.c.p.-amenable approximation.</p>
+<p>This is one formal premise, but it packages several mathematical identifications: the
+synchronous separation itself, its realization as a trace on the universal measurement algebra,
+and the failure of u.c.p.-amenable approximation. Those identifications are cited, through the
+synchronous-games literature following MIP*=RE, and not proved here. Checking that the
+statement above says what that literature actually provides is the one piece of mathematics a
+reader must do by hand; everything downstream of it is verified.</p>
+<p>Downstream includes <strong>free-product permanence of approximate u.c.p. liftability</strong>
+(Boca-dilation territory), proved internally as <code>bocaFreeProductPermanence_holds_internal</code>.</p>
 <p>The certificate:</p>
 <pre><code>'ZFib.CEP.cep_false_operator_algebraic_single_scaffold' depends on axioms:
   [propext, Classical.choice, Quot.sound,
    ZFib.CEP.kirchberg_game_separation_ucp_structured]
 </code></pre>
-<p><code>propext</code>, <code>Classical.choice</code> and <code>Quot.sound</code> are Lean's three standard foundational axioms,
-present in essentially every development built on Mathlib. The fourth line is the game
-separation. There is no fifth line, and no <code>sorryAx</code> — see section 3 for what that means.</p>
+<p>Three entries of ambient logic, one domain-specific premise. There is no fifth entry and no
+<code>sorryAx</code>.</p>
 <hr />
-<h2>3. Reading a machine-checked claim, in one minute</h2>
-<p>Three notions suffice to audit what follows.</p>
-<ul>
-<li><strong>The kernel.</strong> A Lean proof is not accepted because a program judged it plausible: every
-  proof is re-checked by a small trusted core. If the development compiles, each <code>theorem</code> in
-  it is a theorem of the ambient logic, <em>given the axioms listed for it</em>.</li>
-<li><strong>An <code>axiom</code> is a citation.</strong> It states something without proof — the formal counterpart of
-  "by [JNVWY 2020]". Such statements are tracked: <code>#print axioms T</code> reports every axiom the
-  proof of <code>T</code> rests on, however deeply buried. A citation used three layers down still
-  appears in the list.</li>
-<li><strong>A <code>sorry</code> is a gap, and it is visible.</strong> It marks an unfinished proof, and it is tracked
-  the same way: anything depending on one reports <code>sorryAx</code> among its axioms. The list in
-  section 2 contains none. The conditional chains of section 4 do contain <code>sorryAx</code>, by
-  design — their gaps are the named statements listed in section 5.</li>
-</ul>
-<p>So the audit is mechanical: check the development, print the axiom lists, read them. The audit
-script also <em>fixes</em> the main theorem's list, so any change that quietly enlarged it would fail
-to compile.</p>
-<hr />
-<h2>4. The complexity-free architecture</h2>
+<h2>4. The complexity-free routes</h2>
 <p>Can ¬CEP be reached without MIP*=RE, by exhibiting a non-hyperlinear group? That is open.
-What is formalized here is the sharpest reduction skeleton known to the author, with the open
-cores carried as explicit hypotheses — not as axioms, and not as gaps:</p>
-<p><strong>Chain A, rank one</strong>
-(<a href="ZFib/External/OperatorAlgebra/CEP/ConditionalChain.html"><code>ConditionalChain.lean</code></a>):</p>
+Formalized here is a reduction skeleton with the open cores as explicit hypotheses:</p>
+<p><strong>Rank one</strong> (<a href="ZFib/External/OperatorAlgebra/CEP/ConditionalChain.html"><code>ConditionalChain.lean</code></a>):</p>
 <pre><code class="language-lean">theorem qce_implies_cep_false (p : Nat) [Fact (Nat.Prime p)]
     (hQCE : QCE_p p) : ConnesNonEmbeddableWitness
 </code></pre>
-<p><code>QCE_p</code> is a dimension-uniform Hilbert–Schmidt rigidity statement on the congruence edge of
-the Bass–Serre amalgam <code>SL₂(ℤ) ∗_{Γ₀(p)} SL₂(ℤ)</code>. From it: flexible HS-stability of the
-amalgam, then a Dogon–Vigdorovich central-extension obstruction forcing a non-hyperlinear
-group, then the group–von-Neumann dictionary yields the witness.</p>
-<p><strong>Chain B, higher rank</strong>
-(<a href="ZFib/External/OperatorAlgebra/CEP/HighRankChain.html"><code>HighRankChain.lean</code></a>):</p>
+<p><code>QCE_p</code> is a dimension-uniform Hilbert–Schmidt rigidity statement on the congruence edge of the
+Bass–Serre amalgam <code>SL₂(ℤ) ∗_{Γ₀(p)} SL₂(ℤ)</code>. From it: flexible HS-stability of the amalgam, a
+Dogon–Vigdorovich central-extension obstruction forcing a non-hyperlinear group, then the
+group–von-Neumann dictionary.</p>
+<p><strong>Higher rank</strong> (<a href="ZFib/External/OperatorAlgebra/CEP/HighRankChain.html"><code>HighRankChain.lean</code></a>):</p>
 <pre><code class="language-lean">theorem acm_implies_cep_false (L : HighRankLatticeData) (hACM : ACM L) :
     ConnesNonEmbeddableWitness
 </code></pre>
 <p><code>ACM</code> (approximate congruence-monomiality) is the regular-sector half of flexible HS-stability
-for a higher-rank lattice; the remainder of the chain uses the Dogon–Vigdorovich 2025
-higher-rank (T;FD) mechanism and the same shared tail.</p>
-<p>Both compositions are free of gaps: what remains open are the named statements of section 5
-and the two cores. Their status, established in section 6, is the reason these chains are
-presented as a map rather than a programme: <strong>the core of Chain A appears to be false</strong> — an
-exact multiplicity computation shows the torus-phase obstruction <code>QCE_p</code> would need has
-asymptotically vanishing relative mass — and <strong>the core of Chain B is ¬CEP-hard</strong>, since
-proving it would already produce the non-hyperlinear group. Formalizing the chains is what
-turns those diagnoses into sharp, checkable statements about where the difficulty sits.</p>
-<p>The fully proved special case is the tempered subcategory in
+for a higher-rank lattice; the rest uses the Dogon–Vigdorovich 2025 higher-rank (T;FD)
+mechanism and the same shared tail.</p>
+<p>The status of these two is precise. The displayed implications take <code>hQCE</code> and <code>hACM</code> as
+parameters, and their final composition terms contain no <code>sorry</code>. Their transitive dependency
+closures nevertheless contain <code>sorryAx</code>, through the unfinished supporting declarations listed
+in §5. They are therefore formal maps of proposed reductions, not completed conditional
+reductions. None of those declarations lies in the dependency closure of the theorem in §3.</p>
+<p>The fully proved fragment is the tempered subcategory in
 <a href="ZFib/External/OperatorAlgebra/CEP/TemperedGap.html"><code>TemperedGap.lean</code></a> — the 2×2 Gram
-positivity gap and the Deligne temperedness bound <code>2√p/(p+1) &lt; 1</code> — with no gaps and no added
-axioms. It is a short starting point for a reader who wants to read one complete proof first.</p>
+positivity gap and the Deligne temperedness bound <code>2√p/(p+1) &lt; 1</code> — with no <code>sorry</code> and no
+domain-specific premise. It is a short place to read one complete proof.</p>
 <hr />
 <h2>5. Every gap, named</h2>
-<p>22 named open statements, in 7 files. A single name may cover more than one branch; every
-<code>sorry</code> in the development lies in these files, and each carries a <code>-- TARGET:</code> comment at its
-site. Categories: <strong>(A)</strong> genuinely open hard core, <strong>(B)</strong> known in the literature and
-awaiting formalization, <strong>(C)</strong> routine technical steps.</p>
+<p>22 named open declarations, in 7 files. One name may cover more than one branch; every <code>sorry</code>
+in the development lies in these files, each carrying a <code>-- TARGET:</code> comment at its site.
+Categories: <strong>(A)</strong> genuinely open hard core, <strong>(B)</strong> known in the literature, not proved here,
+<strong>(C)</strong> routine technical steps.</p>
 <table>
 <thead>
 <tr>
 <th>File</th>
-<th>Statement</th>
+<th>Declaration</th>
 <th>Category</th>
 </tr>
 </thead>
@@ -230,7 +274,7 @@ awaiting formalization, <strong>(C)</strong> routine technical steps.</p>
 <tr>
 <td><code>Substrate/BruhatTitsTree.lean</code></td>
 <td><code>regularTree</code>, <code>pgl2TreeAction</code>, <code>sl2TreeAction</code>, <code>edgeStabilizer</code>, <code>adjacency_spectrum_regularTree</code></td>
-<td>B (classical Serre <em>Trees</em> material; none of it is used by any theorem above — the chains consume only the proved abstract amalgam <code>serreAmalgam</code>)</td>
+<td>B (classical Serre <em>Trees</em> material; used by no theorem above — the routes consume only the proved abstract amalgam <code>serreAmalgam</code>)</td>
 </tr>
 <tr>
 <td><code>Substrate/TracialUltrapower.lean</code></td>
@@ -249,108 +293,130 @@ awaiting formalization, <strong>(C)</strong> routine technical steps.</p>
 </tr>
 </tbody>
 </table>
-<p>None of these touches the theorem of section 2. That is not a promise but a mechanical fact:
-its axiom list contains no <code>sorryAx</code>.</p>
-<p>One point of fidelity: the amalgam's right edge inclusion is untwisted, so the formal object
-is the double <code>SL₂(ℤ) ∗_{Γ₀(p)} SL₂(ℤ)</code>. The Atkin–Lehner twist identifying it with
-<code>SL₂(ℤ[1/p])</code> is needed only to <em>prove</em> <code>QCE_p</code>, not for the conditional reduction.</p>
+<p>None of these occurs in the dependency closure of the theorem in §3. That is not a promise but
+a mechanical fact: its list of assumptions contains no <code>sorryAx</code>.</p>
+<p>One point of fidelity: the amalgam's right edge inclusion is untwisted, so the formal object is
+the double <code>SL₂(ℤ) ∗_{Γ₀(p)} SL₂(ℤ)</code>. The Atkin–Lehner twist identifying it with <code>SL₂(ℤ[1/p])</code>
+is needed only to <em>prove</em> <code>QCE_p</code>, not for the conditional reduction.</p>
 <hr />
-<h2>6. Why the operator-algebraic routes fail</h2>
-<p>What makes ¬CEP resistant to a proof internal to operator algebras. Each route below is
-closed; the details are in the accompanying note.</p>
+<h2>6. What the complexity-free routes do not establish</h2>
+<p>These are limitations of specified arguments, not impossibility theorems.</p>
 <ol>
 <li>
-<p><strong>The core of Chain A fails structurally.</strong> The data distinguishing edge rigidity sits on a
-   block of dimension <code>Θ(k)</code> inside congruence representations of dimension <code>p^{k-1}(p+1)</code> —
-   vanishing relative mass. Optimal alignment <em>succeeds</em> asymptotically: the torus-phase
-   obstruction washes out at rate <code>√k·p^{-(k-1)/2}</code>, confirmed numerically. So the rigidity
-   <code>QCE_p</code> demands is not present. The reason is structural: <code>SL₂(ℤ[1/p])</code> has no property (T),
-   and nothing rigidifies the amenable congruence tower.</p>
+<p><strong>The rank-one core.</strong> The data distinguishing edge rigidity sits on a block of dimension
+   <code>Θ(k)</code> inside congruence representations of dimension <code>p^{k-1}(p+1)</code>, so its relative mass
+   vanishes; optimal alignment succeeds asymptotically, the torus-phase obstruction washing out
+   at rate <code>√k·p^{-(k-1)/2}</code> (confirmed numerically). The computed obstruction therefore cannot
+   establish <code>QCE_p</code>. The truth of <code>QCE_p</code> is not settled here. Structurally, <code>SL₂(ℤ[1/p])</code> has
+   no property (T), and nothing rigidifies the amenable congruence tower.</p>
 </li>
 <li>
-<p><strong>Rigid, same-dimension stability is not available as an axis.</strong> By the Becker–Lubotzky
-   mechanism an infinite hyperlinear property-(T) group cannot be HS-stable. The flexible
-   notion is therefore the only live one — and it is exactly the one whose higher-rank
-   instances are open.</p>
+<p><strong>Rigid, same-dimension stability.</strong> By the Becker–Lubotzky mechanism an infinite
+   hyperlinear property-(T) group cannot be HS-stable. Within this stability strategy the rigid
+   same-dimension variant is therefore unavailable; the flexible variant remains open, and it
+   is exactly the one whose higher-rank instances are open.</p>
 </li>
 <li>
-<p><strong>The core of Chain B is ¬CEP-hard rather than a reduction.</strong> Flexible HS-stability of a
-   2-Kazhdan higher-rank lattice — Dogon–Vigdorovich's own Problem 1.3 — would already produce
-   an explicit non-hyperlinear group. The sharpest attack on it, a coupled op-norm/HS Hölder
-   bootstrap against the (T;FD) spectral gap, does not close: the two halves require mutually
-   exclusive regimes. The op-2 defect is rank-localized, and hiding it demands a growing
-   complement, which destroys the Hölder constant the other half needs.</p>
+<p><strong>The higher-rank core is ¬CEP-hard.</strong> Flexible HS-stability of a 2-Kazhdan higher-rank
+   lattice — Dogon–Vigdorovich's own Problem 1.3 — would already produce an explicit
+   non-hyperlinear group. The sharpest attack tried here, a coupled op-norm/HS Hölder bootstrap
+   against the (T;FD) spectral gap, does not close: the two halves require mutually exclusive
+   regimes, since the op-2 defect is rank-localized and hiding it demands a growing complement,
+   which destroys the Hölder constant the other half needs. This does not exclude another proof.</p>
 </li>
 <li>
-<p><strong>The monomiality route rests on a false assumption.</strong> Approximate congruence-monomiality
-   fails: cuspidal representations are not flexibly HS-monomializable within the required
-   <code>o(dim)</code> budget.</p>
+<p><strong>The monomiality route.</strong> The proposed congruence-monomiality argument does not attain the
+   required <code>o(dim)</code> budget on the cuspidal sector.</p>
 </li>
 <li>
-<p><strong>The non-soficity route aims at the wrong invariant.</strong> The cosystolic-expansion programme
-   targets <em>non-sofic</em> groups; since sofic implies hyperlinear, a non-sofic group yields no
-   non-hyperlinear group and no ¬CEP.</p>
+<p><strong>The non-soficity route targets a different invariant.</strong> The cosystolic-expansion programme
+   produces non-sofic groups, and non-soficity alone does not imply non-hyperlinearity — sofic
+   implies hyperlinear, not conversely — so such a group yields no refutation of CEP by this
+   route.</p>
 </li>
 <li>
-<p><strong>The intrinsic invariants cannot see it.</strong> Cost, ℓ²-Betti numbers, cocycle superrigidity
-   and sofic entropy are orbit-equivalence, ℓ²-spectral or sofic-relative quantities, whereas
+<p><strong>The intrinsic invariants.</strong> Cost, ℓ²-Betti numbers, cocycle superrigidity and sofic
+   entropy are orbit-equivalence, ℓ²-spectral or sofic-relative quantities, whereas
    hyperlinearity is a trace-approximability property. Treeable relations are sofic at every
-   cost and every ℓ²-Betti value, so no implication of the form "invariant ≠ expected value ⟹
-   non-hyperlinear" exists. The known candidate witnesses are built to <em>satisfy</em> Lück's
-   determinant conjecture.</p>
+   cost and every ℓ²-Betti value. No implication from these invariants to non-hyperlinearity is
+   established here or cited in the generality these routes would need, and the known candidate
+   witnesses are built to <em>satisfy</em> Lück's determinant conjecture.</p>
 </li>
 </ol>
-<p>The value gap MIP*=RE detects is invisible to these invariants. That explains why a
-complexity-free proof has stayed out of reach, and why isolating the complexity input as one
-named statement, rather than obscuring it, is the useful interface for operator algebraists.</p>
+<p>The value gap MIP*=RE detects is not visible to these invariants. That is the reason for
+isolating the complexity input as one named premise rather than obscuring it. The implication
+in §3 is independent of every diagnosis in this section.</p>
 <hr />
-<h2>7. Spectral truncations as operator systems</h2>
-<p>Independent of CEP: a machine-checked finite stage of the spectral-truncation programme of
-Connes and van Suijlekom. Compress the shift algebra <code>A = C*(S)</code> on <code>ℓ²(ℕ)</code> by the spectral
-projection <code>Q_M = 1_{[0,M]}(N)</code> of the number operator. Verified, with no added axioms —
-Lean's three standard axioms only:</p>
-<ul>
-<li><strong><code>OS_M = Q_M A Q_M</code> is a genuine operator system</strong>: unital, self-adjoint, and <em>not</em> closed
-  under multiplication. The failure is proved, not asserted, at the cutoff mode:
-  <code>(Q_M S* Q_M)(Q_M S Q_M) ≠ Q_M (S*S) Q_M = Q_M</code>, i.e. <code>diag(1,…,1,0) ≠ diag(1,…,1)</code>
-  (<a href="ZFib/Theorems/T_FIB_OS_TRUNCATION_OPERATOR_SYSTEM.html"><code>T_FIB_OS_TRUNCATION_OPERATOR_SYSTEM.lean</code></a>).</li>
-<li><strong>The Lipschitz seminorm <code>L_M(a) = ‖[N_M, a]‖</code> lives on the shift, not the diagonal</strong>:
-  <code>[N_M, S_M] = S_M ≠ 0</code>, while <code>[N_M, ·]</code> annihilates the diagonal masa. The full-band
-  computation <code>[N_M, S^p] = p·S^p</code> is proved by induction on the band index, together with the
-  separating-mode independence giving <code>ker L_M = ℂ·Q_M</code> for explicit finite band combinations
-  (<a href="ZFib/Theorems/T_FIB_OS_FULL_BAND_KERNEL.html"><code>T_FIB_OS_FULL_BAND_KERNEL.lean</code></a>).</li>
-<li><strong>The finite-stage Rieffel axioms hold</strong> for <code>(OS_M, L_M)</code>: the *-seminorm axioms, kernel
-  equals the scalars on the first band, and lower semicontinuity as closedness of the
-  Lipschitz unit ball (<a href="ZFib/Theorems/T_FIB_OS_CQMS.html"><code>T_FIB_OS_CQMS.lean</code></a>).</li>
-</ul>
-<p>One step here is stated and not proved: <code>fibOSToep_normEquiv_constant</code>, the
-finite-dimensional equivalence of norms giving <code>‖a'‖_op ≤ C_M · L_M(a')</code> on the off-diagonal
-complement. It is an openly named hypothesis with its goal written out, it is not a gap in the
-sense of section 3, and it carries none of the results above; what follows from it is assembled
-conditionally on it.</p>
-<p><strong>Gromov–Hausdorff convergence of the truncated state spaces is not claimed.</strong> Transplanting
-the <code>S¹</code> Fejér argument of Connes–van Suijlekom is the natural next step, and the one where a
-second pair of eyes would matter most.</p>
-<p>Part II rests on a small self-contained <code>ℓ²(ℕ)</code> substrate
+<h2>7. Spectral truncations</h2>
+<p>Independent of CEP: finite-dimensional statements about the compression of the shift, machine-
+checked with no domain-specific premise. Let <code>S</code> be the unilateral shift on <code>ℓ²(ℕ)</code>, <code>N</code> the
+number operator, <code>Q_M = 1_{[0,M]}(N)</code> the cutoff projection, <code>S_M = Q_M S Q_M</code>, and
+<code>N_M = Q_M N Q_M</code>.</p>
+<p><strong>Proved</strong> (<a href="ZFib/Theorems/T_FIB_OS_TRUNCATION_OPERATOR_SYSTEM.html"><code>T_FIB_OS_TRUNCATION_OPERATOR_SYSTEM.lean</code></a>):
+<code>Q_M</code> is self-adjoint and idempotent; <code>S_M</code> and <code>S_M*</code> are mutual adjoints in matrix elements;
+<code>[N_M, ·]</code> annihilates the diagonal modes while <code>[N_M, S_M] = S_M</code> on basis vectors, so
+<code>‖S_M‖ &gt; 0</code> for <code>M ≥ 1</code>; and</p>
+<pre><code>S_M* S_M ≠ Q_M      (M ≥ 1)
+</code></pre>
+<p>This is a cutoff-defect identity: in <code>C*(S)</code> one has <code>S*S = 1</code>, so the compression of the
+product is <code>Q_M</code>, whereas the product of the compressions is <code>diag(1,…,1,0)</code>. Compression does
+not respect products. Note what is <em>not</em> asserted: for <code>A = C*(S)</code> the projection <code>Q_M</code> is
+finite-rank and the Toeplitz algebra contains the compacts, so the corner <code>Q_M A Q_M</code> is an
+algebra; the operator-system phenomenon lives in the truncated generating system, not in the
+corner, and no claim that <code>Q_M C*(S) Q_M</code> fails to be multiplicatively closed is made here.</p>
+<p><strong>Proved</strong> (<a href="ZFib/Theorems/T_FIB_OS_CQMS.html"><code>T_FIB_OS_CQMS.lean</code></a>): three finite-stage
+ingredients for <code>L_M(a) = ‖[N_M, a]‖</code>. It is a *-seminorm (non-negative, absolutely
+homogeneous, subadditive, star-invariant); for <code>M ≥ 2</code> its kernel on the first-band symbols
+<code>c₀Q_M + c₁S_M + c₋₁S_M*</code> is exactly the scalar term, i.e. the commutator vanishes on all basis
+vectors precisely when <code>c₁ = c₋₁ = 0</code>; and its unit ball <code>{a : L_M(a) ≤ 1}</code> is closed. Weak-*
+metrizability of the state space, and hence a full compact-quantum-metric-space structure, is
+<strong>not</strong> proved here — the module documents it as a named follow-up.</p>
+<p><strong>Proved</strong> (<a href="ZFib/Theorems/T_FIB_OS_FULL_BAND_KERNEL.html"><code>T_FIB_OS_FULL_BAND_KERNEL.lean</code></a>):
+for each fixed <code>p</code> with <code>1 ≤ p ≤ M</code>, the band-eigen identities <code>[N_M, S_M^p] = p·S_M^p</code> and
+<code>[N_M, (S_M*)^p] = −p·(S_M*)^p</code> on basis vectors, together with the kernel criterion for the
+band-pair symbol <code>c₀Q_M + c·S_M^p + d·(S_M*)^p</code>. A kernel theorem for an arbitrary simultaneous
+sum over all bands is not asserted.</p>
+<p>Certificates:</p>
+<pre><code>'ZFib.Theorems.FibOSTruncation.fibonacci_os_truncation_substantive' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+'ZFib.Theorems.FibOSCQMS.fibonacci_os_cqms_finite_stage_substantive' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+'ZFib.Theorems.FibOSFullBandKernel.R1_full_toeplitz_band' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+</code></pre>
+<p>One further proposition, <code>fibOSToep_normEquiv_constant</code> — the finite-dimensional equivalence of
+norms giving <code>‖a'‖_op ≤ C_M · L_M(a')</code> on the off-diagonal complement — is an explicit unproved
+premise, used only by the later conditional continuation. None of the statements above depends
+on it. <strong>Gromov–Hausdorff convergence of the truncated state spaces is not claimed</strong>;
+transplanting the <code>S¹</code> Fejér argument of Connes–van Suijlekom is the natural continuation.</p>
+<p>These statements rest on a small self-contained <code>ℓ²(ℕ)</code> substrate
 (<a href="ZFib/External/OperatorAlgebra/AnalyticClosure/TruncationSubstrate.html"><code>TruncationSubstrate.lean</code></a>).</p>
 <hr />
-<h2>8. Checking it yourself</h2>
-<p>Everything needed is <a href="https://github.com/leanprover/elan">elan</a>, the Lean version manager;
-the rest is fetched automatically.</p>
-<pre><code class="language-bash">lake exe cache get                      # Mathlib, prepared, once
-lake build                              # check every proof
-lake env lean scripts/AxiomCheck.lean   # print and freeze the axiom certificates
+<h2>8. What can be inspected here, and what re-checking requires</h2>
+<p>No Lean installation is needed to read the statements: every declaration named above has a page
+on this site, with its type, its documentation and links to each definition appearing in it.
+Tactic proofs are not shown.</p>
+<p>The certificates quoted in §3 and §7 are reported output of <code>#print axioms</code>. This site does not
+reproduce them; a fresh kernel re-check requires the Lean sources, which are private and
+available on request. With those sources, three commands reproduce everything:</p>
+<pre><code class="language-bash">lake exe cache get
+lake build
+lake env lean scripts/AxiomCheck.lean
 </code></pre>
-<p>If the second command succeeds, every theorem is verified from the axioms listed for it. The
-third prints the certificates and fails if the main theorem's list ever differs from the four
-lines of section 2 — so that list is an invariant, not a claim in a README. The same three
-commands run automatically on every change, and the resulting axiom report is kept.</p>
-<p>Verified against Lean <code>v4.30.0-rc2</code> and Mathlib <code>1a5bbc7d3785</code>.</p>
+<p>The third prints the certificates and fails if the main theorem's list ever differs from the
+four entries in §3, so that list is an invariant rather than a claim in prose.</p>
+<p>Checked against Lean <code>v4.30.0-rc2</code> and Mathlib <code>1a5bbc7d3785</code>.</p>
 <hr />
 <h2>9. Notes</h2>
+<p>Mathlib supplies the ambient analysis and algebra — C*-algebras, the continuous functional
+calculus, completely positive maps, Hilbert spaces, ultrafilters, matrix algebras — through 76
+imported modules. The objects this subject needs and Mathlib does not contain are constructed
+here: Connes embeddability and the tracial matrix ultrapower, tracial states, the universal
+measurement algebra structure, u.c.p.-amenable traces, the Boca dilation and its permanence
+estimates, flexible HS-stability, the Bass–Serre amalgam data, and the <code>ℓ²(ℕ)</code> truncation
+substrate. That is 866 theorems, 114 lemmas, 549 definitions and 62 structures across 210
+files.</p>
 <p>The <code>fib</code> and <code>ZFib</code> name prefixes are a namespace convention and carry no mathematical
-content. Only the <code>theorem</code> and <code>def</code> statements are load-bearing, and the axiom certificates
-are the arbiter of what is proved.</p>
-<p>Every dependency is either Mathlib or present here, so the development stands on its own.
-Apache-2.0.</p>
+content. Only <code>theorem</code> and <code>def</code> statements are load-bearing; the certificates are the arbiter
+of what is proved. Apache-2.0.</p>
 <p>Contact: Jorrit Velzeboer — jorrit@yom.net.</p></main></body></html>
