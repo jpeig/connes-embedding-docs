@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The negative Connes Embedding Problem, machine-checked, with the complexity-theoretic input isolated as a single axiom</title><link rel="stylesheet" href="style.css"><link rel="icon" href="favicon.svg"><style>
+.landing{max-width:52em;margin:0 auto;padding:2rem 1.25rem 5rem;line-height:1.6}
+.landing h1{line-height:1.2;margin-bottom:.6rem}
+.landing h2{margin-top:2.2rem;padding-bottom:.3rem;border-bottom:1px solid rgba(128,128,128,.3)}
+.landing pre{overflow-x:auto;padding:.8rem 1rem;border:1px solid rgba(128,128,128,.3);border-radius:3px}
+.landing table{border-collapse:collapse;width:100%;display:block;overflow-x:auto}
+.landing th,.landing td{border:1px solid rgba(128,128,128,.3);padding:.4rem .6rem;text-align:left;vertical-align:top}
+.landing blockquote{border-left:3px solid rgba(128,128,128,.4);margin-left:0;padding-left:1rem}
+.landing .apibar{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;
+  margin:1.5rem 0 2rem;padding:.9rem 1.1rem;border:1px solid rgba(128,128,128,.35);border-radius:3px}
+.landing .apibar a{font-weight:600}
+.landing .note{font-size:.92em;opacity:.85}
+</style></head>
+<body><main class="landing"><h1>The negative Connes Embedding Problem, machine-checked, with the complexity-theoretic input isolated as a single axiom</h1>
+<div class="apibar"><span><strong>Machine-checked Lean 4 formalization.</strong> Every declaration below is verified by the proof kernel.</span><a href="api.html">Browse the API &rarr;</a></div><p class="note"><em>The source repository is private; access on request (jorrit@yom.net). These pages show declaration statements and documentation, and are generated from the sources by doc-gen4.</em></p>
+<p><strong>Lean 4 + Mathlib. Everything operator-algebraic in the main theorem is verified by the
+proof kernel; the one input from outside operator algebra (the MIP*=RE game separation)
+is quarantined as a single, explicitly named statement. A reproducible check prints the
+exact dependency list.</strong></p>
+<p>This repository accompanies the note <em>"A machine-checked operator-algebraic route to the
+negative Connes Embedding Problem"</em> (see <code>paper/</code>).</p>
+<hr />
+<h2>1. What this repository shows</h2>
+<p>Since Ji–Natarajan–Vidick–Wright–Yuen (MIP*=RE, 2020), the Connes Embedding Problem is
+known to have a negative answer — but the decisive input comes from quantum complexity
+theory, a field away from the operator-algebra community that owns the problem. That
+creates a practical trust problem: to <em>use</em> ¬CEP one has to take a long
+interactive-proof-theoretic construction on faith, and the operator-algebraic part of the
+argument (Kirchberg/Tsirelson passage, game algebras, traces) has never been laid out at a
+level of rigor where every step can be inspected.</p>
+<p><strong>Where to start (10 minutes).</strong> Read §2 below — one theorem and its four-line
+certificate. Then run the three commands of §8 to re-verify everything yourself. If
+operator systems and spectral truncations are your area, §7 is self-contained, fully
+proved, and the best second stop.</p>
+<p>This repository does two things about that:</p>
+<ol>
+<li>
+<p><strong>Part I(a) — the main result.</strong> The entire operator-algebraic reduction from the game
+   separation down to a non-Connes-embeddable tracial state is formalized and verified by
+   the Lean proof kernel. The complexity-theoretic input enters at exactly <strong>one named
+   point</strong> — an explicitly stated axiom recording what MIP*=RE provides — and the
+   verifier prints that this is the <em>only</em> non-standard input. Everything else (the
+   dilation and lifting arguments, free-product permanence, the u.c.p. extraction, the
+   final wiring) is checked down to the axioms of the logic.</p>
+</li>
+<li>
+<p><strong>Part I(b) — the map.</strong> A formalized <em>conditional</em> architecture for a complexity-free
+   ¬CEP — two reduction chains through flexible Hilbert–Schmidt stability and the
+   Dogon–Vigdorovich obstruction, with every open ingredient isolated as an explicitly
+   marked leaf — together with an honest account of why the known purely
+   operator-algebraic attack routes fail (§6). The blunt summary: the machine-checked
+   map keeps ending at the same place — the uncomputability mechanism is, at present, the
+   only known certificate.</p>
+</li>
+</ol>
+<p><strong>Part II</strong> is a separate, self-contained bonus in the spectral-truncation direction: the
+compression of the shift algebra to a finite spectral block is verified to be a genuine
+operator system (unital, self-adjoint, <em>not</em> closed under multiplication) carrying a
+non-degenerate Lipschitz seminorm from the commutator with the truncated number operator,
+with the finite-stage Rieffel compact-quantum-metric-space axioms. See §7.</p>
+<hr />
+<h2>2. The main theorem</h2>
+<p>The headline declaration is
+<a href="ZFib/External/OperatorAlgebra/CEP/Faithful/FaithfulSingleCapstone.html"><code>FaithfulSingleCapstone.lean</code></a>:</p>
+<pre><code class="language-lean">/-- **Single-citation-scaffold ¬CEP.** `#print axioms` = kernel trio plus exactly
+`kirchberg_game_separation_ucp_structured`; the Boca dilation, finite-dimensional
+liftability, free-product permanence, u.c.p. extraction, and final wiring are
+kernel-checked. -/
+theorem cep_false_operator_algebraic_single_scaffold :
+    ZFib.CEP.ConnesNonEmbeddableWitness
+</code></pre>
+<p>where <code>ConnesNonEmbeddableWitness</code> bundles a C*-algebra with a tracial state that admits
+no trace-preserving embedding into a tracial matrix ultrapower — a witness refuting CEP.</p>
+<p>The single named input is:</p>
+<pre><code class="language-lean">/-- **Structured MIP*=RE citation.** The KPS/JNVWY synchronous separation, repackaged to
+return the canonical universal measurement algebra with its
+`MeasurementAlgebraStructure` (faithful: the qc-model construction IS on
+`C*(F(n,m)) ≅ ∗ⁿ Cᵐ`) together with the absence of a u.c.p.-amenable (qa) trace. -/
+axiom kirchberg_game_separation_ucp_structured : ...
+</code></pre>
+<p>In words: there is a finite synchronous game whose quantum-commuting model lives on the
+universal measurement algebra (the n-fold free product of m-outcome PVM algebras,
+<code>C*(F(n,m)) ≅ ∗ⁿ Cᵐ</code>), whose canonical trace admits no u.c.p.-amenable approximation.
+This is precisely the content MIP*=RE supplies through the synchronous-games literature;
+it is <em>stated</em>, not proved, here — deliberately, so that the boundary between "verified
+operator algebra" and "cited complexity theory" is a single searchable line of code.</p>
+<p>Everything downstream of that line is kernel-checked, including the step that was until
+recently a second citation: <strong>free-product permanence of approximate u.c.p. liftability</strong>
+(Boca-dilation territory) is now proved internally
+(<code>bocaFreeProductPermanence_holds_internal</code>), which is what collapsed the perimeter from
+two citations to one.</p>
+<p>The verified certificate (see §3 and <code>scripts/AxiomCheck.lean</code>):</p>
+<pre><code>'ZFib.CEP.cep_false_operator_algebraic_single_scaffold' depends on axioms:
+  [propext, Classical.choice, Quot.sound,
+   ZFib.CEP.kirchberg_game_separation_ucp_structured]
+</code></pre>
+<p><code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code> are Lean's three standard foundational axioms,
+present in essentially every Mathlib-based development. The fourth line is the game
+separation. There is no fifth line.</p>
+<hr />
+<h2>3. How to read a machine-checked claim (one minute, no Lean background)</h2>
+<p>Three vocabulary items suffice to audit this repository:</p>
+<ul>
+<li><strong>The kernel.</strong> Lean proofs are not "checked by a program that looks reasonable" —
+  every proof term is re-verified by a small trusted kernel. If the repository compiles,
+  every <code>theorem</code> is a theorem of the ambient logic <em>given its listed axioms</em>.</li>
+<li><strong><code>axiom</code> = a named citation.</strong> An <code>axiom</code> declaration introduces a statement without
+  proof. It is the formal analogue of "by [JNVWY 2020]". Crucially, axioms are <em>tracked</em>:
+  the command <code>#print axioms someTheorem</code> makes the kernel print the exact set of axioms
+  the proof of <code>someTheorem</code> ultimately rests on. Nothing can be smuggled in — a
+  citation used three layers down still shows up in the list.</li>
+<li><strong><code>sorry</code> = a visible, marked gap.</strong> A <code>sorry</code> is an explicitly unfinished proof. It
+  is also tracked: any theorem whose proof (transitively) touches a <code>sorry</code> shows the
+  pseudo-axiom <code>sorryAx</code> in its <code>#print axioms</code> output. The main theorem's list above
+  contains <strong>no</strong> <code>sorryAx</code>; the conditional architecture's entry points do, <em>by design</em>
+  — their gaps are exactly the enumerated open lemmas of §5.</li>
+</ul>
+<p>So the audit protocol for a skeptical reader is: build the repository, run the axiom
+check, and read the printed lists. <code>scripts/AxiomCheck.lean</code> additionally <em>freezes</em> the
+main theorem's list — if any change to the code silently enlarged it, the build would fail.</p>
+<hr />
+<h2>4. The complexity-free conditional architecture</h2>
+<p>Could ¬CEP be reached <em>without</em> MIP*=RE — by purely operator-algebraic and
+geometric-group-theoretic means, i.e. by exhibiting a non-hyperlinear group? That is
+open. This repository formalizes the, to our knowledge, sharpest known reduction
+skeleton, with the open cores carried as explicit hypotheses (<code>Prop</code> arguments — not
+axioms, not <code>sorry</code>):</p>
+<p><strong>Chain A — rank-1 route</strong> (<a href="ZFib/External/OperatorAlgebra/CEP/ConditionalChain.html"><code>ConditionalChain.lean</code></a>):</p>
+<pre><code class="language-lean">theorem qce_implies_cep_false (p : Nat) [Fact (Nat.Prime p)]
+    (hQCE : QCE_p p) : ConnesNonEmbeddableWitness
+</code></pre>
+<p><code>QCE_p</code> is a dimension-uniform Hilbert–Schmidt rigidity statement on the congruence edge
+of the Bass–Serre amalgam <code>SL₂(ℤ) ∗_{Γ₀(p)} SL₂(ℤ)</code>; from it, flexible HS-stability of
+the amalgam, then a Dogon–Vigdorovich central-extension obstruction forces a
+non-hyperlinear group, then the group-von-Neumann dictionary produces the witness.</p>
+<p><strong>Chain B — high-rank route</strong> (<a href="ZFib/External/OperatorAlgebra/CEP/HighRankChain.html"><code>HighRankChain.lean</code></a>):</p>
+<pre><code class="language-lean">theorem acm_implies_cep_false (L : HighRankLatticeData) (hACM : ACM L) :
+    ConnesNonEmbeddableWitness
+</code></pre>
+<p><code>ACM</code> (approximate congruence-monomiality) is the regular-sector half of flexible
+HS-stability for a high-rank lattice; the rest of the chain reuses the Dogon–Vigdorovich
+2025 higher-rank (T;FD) mechanism and the same shared tail.</p>
+<p>Both composition bodies are <code>sorry</code>-free — the <em>wiring</em> is complete and kernel-checked;
+what remains are the named link lemmas of §5 and the two open cores. The fully proved
+special case (the tempered subcategory: the 2×2 Gram positivity gap plus the Deligne
+<code>2√p/(p+1) &lt; 1</code> temperedness bound) is in
+<a href="ZFib/External/OperatorAlgebra/CEP/TemperedGap.html"><code>TemperedGap.lean</code></a> — zero <code>sorry</code>,
+zero project axioms; a good entry point for a reviewer.</p>
+<p><strong>Status verdicts from our own analysis (§6):</strong> the open core of Chain A appears to be
+<em>false</em> — an exact multiplicity computation shows the torus-phase obstruction that <code>QCE_p</code>
+would need has asymptotically vanishing relative mass — and the open core of Chain B is
+<em>¬CEP-hard</em> (proving it would already produce the non-hyperlinear group). The chains are
+retained because the formalized wiring is precisely what turns those diagnoses into
+sharp, checkable statements about <em>where</em> the difficulty lives.</p>
+<hr />
+<h2>5. Open leaves — every <code>sorry</code>, nothing hidden</h2>
+<p>Regenerated from source: 22 named open leaves in 7 files (a leaf may bundle more than
+one <code>sorry</code> branch; every <code>sorry</code> token in the repository lives in these 7 files, and
+each carries a <code>-- TARGET:</code> comment in the code). Buckets: <strong>(A)</strong> genuinely-open hard core, <strong>(B)</strong> known in the
+literature, needs formalizing, <strong>(C)</strong> routine technical plumbing.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Leaf</th>
+<th>Bucket</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CEP/ConditionalChain.lean</code></td>
+<td><code>sl2z_flexibleHSStable_for_serreVertex</code></td>
+<td>B (virtually free ⟹ flexibly HS-stable)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>approxCloseToExact_of_serre_recombination</code></td>
+<td>C (Bass–Serre normal-form plumbing)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>dogonVigdorovich_centralExtensionData</code></td>
+<td>B (the DV central extension, constructed)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>dogonVigdorovich_not_hyperlinear_of_flexibleHSStable</code></td>
+<td>A/B (the DV obstruction argument)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>exists_faithfulTracialGroupModel</code></td>
+<td>B (canonical faithful tracial group C*-model; the <em>only</em> remaining gap of the shared tail — the dictionary direction itself is now proved)</td>
+</tr>
+<tr>
+<td><code>CEP/HighRankChain.lean</code></td>
+<td><code>acm_implies_flexibleHSStable</code></td>
+<td>A (assembles the open core into stability)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>highRank_flexibleHSStable_implies_nonHyperlinear</code></td>
+<td>B (DV 2025 (T;FD) theorem)</td>
+</tr>
+<tr>
+<td><code>CEP/Basic.lean</code></td>
+<td><code>finiteDimCStar_approx_matrix_model</code></td>
+<td>B (Artin–Wedderburn + trace-weight approximation)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>cep_gap_lemma_target</code></td>
+<td>A (the C*-native game gap, complexity-free form)</td>
+</tr>
+<tr>
+<td><code>CEP/IRSDictionary.lean</code></td>
+<td><code>coHyperlinear_iff_connesEmbeddable</code></td>
+<td>B (Manzoor, arXiv:2502.06697)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>coHyperlinear_dirac_iff_quotient_hyperlinear</code></td>
+<td>B</td>
+</tr>
+<tr>
+<td></td>
+<td><code>cosofic_implies_cohyperlinear</code></td>
+<td>B</td>
+</tr>
+<tr>
+<td><code>CEP/HyperlinearRadical.lean</code></td>
+<td><code>L2Seminorm_neg_two</code></td>
+<td>C (isolated scalar fact)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>noAmenableTrace_iff_inHyperlinearRadical</code> (⟹ only)</td>
+<td>A (⟸ is proved)</td>
+</tr>
+<tr>
+<td><code>Substrate/BruhatTitsTree.lean</code></td>
+<td><code>regularTree</code>, <code>pgl2TreeAction</code>, <code>sl2TreeAction</code>, <code>edgeStabilizer</code>, <code>adjacency_spectrum_regularTree</code></td>
+<td>B (classical Serre <em>Trees</em> material; <strong>off the proof term</strong> of every entry point — the chains consume only the proved abstract amalgam <code>serreAmalgam</code>)</td>
+</tr>
+<tr>
+<td><code>Substrate/TracialUltrapower.lean</code></td>
+<td><code>exists_hyperfiniteII1Factor</code></td>
+<td>B</td>
+</tr>
+<tr>
+<td></td>
+<td><code>germ_cstar_trace_descent</code></td>
+<td>A (the analytic ultrapower descent)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>connesEmbeddable_of_amenable_through_germ</code></td>
+<td>B (alternative summit; off the proof term)</td>
+</tr>
+</tbody>
+</table>
+<p>None of these touches the main theorem of §2 — that is not a promise but a kernel fact:
+its <code>#print axioms</code> output contains no <code>sorryAx</code>.</p>
+<p>Fidelity note carried over from the source: the amalgam's right edge inclusion is
+untwisted, so the formal carrier is the double <code>SL₂(ℤ) ∗_{Γ₀(p)} SL₂(ℤ)</code>; the
+Atkin–Lehner twist identifying it with <code>SL₂(ℤ[1/p])</code> is needed only to <em>prove</em> <code>QCE_p</code>,
+not for the conditional reduction.</p>
+<hr />
+<h2>6. The map of dead ends</h2>
+<p>What makes ¬CEP resistant to a purely operator-algebraic proof? Each of the following
+routes was pursued and closed; the details live in the paper (§5), the diagnoses are
+summarized here.</p>
+<ol>
+<li>
+<p><strong>Chain A's core (<code>QCE_p</code>) fails for a structural reason.</strong> The distinguishing data
+   for edge rigidity sits on a block of dimension <code>Θ(k)</code> inside congruence
+   representations of dimension <code>p^{k-1}(p+1)</code> — asymptotically vanishing relative mass.
+   Optimal alignment <em>succeeds</em> asymptotically (the torus-phase obstruction washes out at
+   rate <code>√k·p^{-(k-1)/2}</code>; confirmed numerically), so the rigidity <code>QCE_p</code> demands is not
+   there. Root cause: <code>SL₂(ℤ[1/p])</code> has no property (T); nothing rigidifies the amenable
+   congruence tower.</p>
+</li>
+<li>
+<p><strong>Rigid (same-dimension) stability is forbidden as an axis.</strong> By the
+   Becker–Lubotzky mechanism, an infinite hyperlinear property-(T) group cannot be
+   HS-stable — so the flexible notion is the only live one, and it is exactly the one
+   whose high-rank instances are open.</p>
+</li>
+<li>
+<p><strong>Chain B's core is ¬CEP-hard, not a reduction.</strong> Flexible HS-stability of a
+   2-Kazhdan high-rank lattice (Dogon–Vigdorovich's own Problem 1.3) would already
+   <em>produce</em> an explicit non-hyperlinear group. Our sharpest attack on it — a coupled
+   op-norm/HS Hölder bootstrap against the (T;FD) spectral gap — was broken by our own
+   adversarial review: the two halves need mutually exclusive regimes (the op-2 defect is
+   rank-localized; hiding it requires a growing complement, which destroys the Hölder
+   constant the other half needs).</p>
+</li>
+<li>
+<p><strong>The monomiality route (high-rank, edge-free) has a false load-bearing
+   assumption.</strong> Approximate congruence-monomiality fails: cuspidal representations are
+   not flexibly-HS-monomializable within the required <code>o(dim)</code> budget.</p>
+</li>
+<li>
+<p><strong>The non-soficity route targets the wrong invariant.</strong> The cosystolic-expansion
+   program (Chapman–Lubotzky §6.1; Dikstein–Dinur–Lubotzky) aims at <em>non-sofic</em> groups —
+   and sofic ⟹ hyperlinear, so a non-sofic group gives no non-hyperlinear group and no
+   ¬CEP.</p>
+</li>
+<li>
+<p><strong>The intrinsic invariants are provably blind.</strong> Cost, ℓ²-Betti numbers, cocycle
+   superrigidity, sofic entropy are orbit-equivalence / ℓ²-spectral / sofic-relative
+   quantities; hyperlinearity is a trace-approximability property. Treeable relations are
+   sofic at every cost and every ℓ²-Betti value, so no "invariant ≠ expected value ⟹
+   non-hyperlinear" implication exists. The known candidate witnesses are even built to
+   <em>satisfy</em> Lück's determinant conjecture.</p>
+</li>
+</ol>
+<p><strong>The honest conclusion</strong>, and the reason this repository's main theorem is shaped the
+way it is: every known purely operator-algebraic route to an explicit non-hyperlinear
+group is currently dead, foreclosed, aimed at the wrong invariant, or exactly as hard as
+¬CEP itself. The value-gap discontinuity that MIP*=RE detects is invisible to the
+standard invariants — which <em>explains</em> why a complexity-free proof has stayed out of
+reach, and why isolating the complexity input as a single named statement (rather than
+pretending it away) is the right interface for the operator-algebra community.</p>
+<hr />
+<h2>7. Part II — spectral truncations as operator systems</h2>
+<p>Independent of CEP, the repository contains a machine-checked finite stage of the
+spectral-truncation program (Connes–van Suijlekom): compressing the shift algebra
+<code>A = C*(S)</code> on <code>ℓ²(ℕ)</code> by the spectral projection <code>Q_M = 1_{[0,M]}(N)</code> of the number
+operator.</p>
+<p>Verified, at zero project axioms (Lean's three standard axioms only):</p>
+<ul>
+<li><strong><code>OS_M = Q_M A Q_M</code> is a genuine operator system</strong> — unital, self-adjoint, and
+  <strong>not closed under multiplication</strong>: the witness
+  <code>(Q_M S* Q_M)(Q_M S Q_M) ≠ Q_M (S*S) Q_M = Q_M</code> is proved as the matrix identity
+  <code>diag(1,…,1,0) ≠ diag(1,…,1)</code>
+  (<a href="ZFib/Theorems/T_FIB_OS_TRUNCATION_OPERATOR_SYSTEM.html"><code>T_FIB_OS_TRUNCATION_OPERATOR_SYSTEM.lean</code></a>).</li>
+<li><strong>The Lipschitz seminorm <code>L_M(a) = ‖[N_M, a]‖</code> is non-degenerate on the shift and
+  degenerate on the diagonal</strong>: <code>[N_M, S_M] = S_M ≠ 0</code> while <code>[N_M, ·]</code> kills the
+  diagonal masa — so the metric structure genuinely lives on the shift.</li>
+<li><strong>Finite-stage Rieffel CQMS axioms</strong> for <code>(OS_M, L_M)</code>
+  (<a href="ZFib/Theorems/T_FIB_OS_CQMS.html"><code>T_FIB_OS_CQMS.lean</code></a>), and the full-band
+  Lipschitz-kernel computation <code>[N_M, S^p] = p·S^p</code>
+  (<a href="ZFib/Theorems/T_FIB_OS_FULL_BAND_KERNEL.html"><code>T_FIB_OS_FULL_BAND_KERNEL.lean</code></a>).</li>
+</ul>
+<p>The natural continuation — Gromov–Hausdorff convergence of the truncated state spaces to
+the limit, transplanting the Connes–van Suijlekom <code>S¹</code> Fejér argument — is <em>not</em> claimed
+here; it is the proposed joint next step.</p>
+<p>(Part II is built on a small self-contained ℓ²(ℕ) substrate,
+<a href="ZFib/External/OperatorAlgebra/AnalyticClosure/TruncationSubstrate.html"><code>TruncationSubstrate.lean</code></a>.
+Two reading notes for the source files: the <code>fib</code>/<code>ZFib</code> prefixes throughout are the
+parent project's namespace convention and carry no mathematical content here; and any
+stray internal tracking labels in comments come from the parent project's bookkeeping —
+only the <code>theorem</code>/<code>def</code> statements are load-bearing, and the axiom check is the
+arbiter of what is proved.)</p>
+<hr />
+<h2>8. Reproducing the check</h2>
+<p>Requirements: <a href="https://github.com/leanprover/elan">elan</a> (the Lean toolchain manager);
+everything else is fetched automatically.</p>
+<pre><code class="language-bash">git clone &lt;this repository&gt;
+cd connes-embedding-lean
+lake exe cache get     # fetch prebuilt Mathlib (~a few GB, one-time)
+lake build             # verify every proof in the repository
+lake env lean scripts/AxiomCheck.lean   # print + freeze the axiom certificates
+</code></pre>
+<p>If <code>lake build</code> succeeds, every theorem in the repository is kernel-verified from its
+listed axioms. <code>scripts/AxiomCheck.lean</code> fails to elaborate if the main theorem's axiom
+list ever differs from the four-line list of §2. The same sequence runs in CI on every
+push (<code>.github/workflows/ci.yml</code>); the resulting <code>axiom-report.txt</code> is archived as a
+build artifact.</p>
+<p>Toolchain: Lean <code>v4.30.0-rc2</code>, Mathlib pinned at <code>1a5bbc7d3785</code>.</p>
+<hr />
+<h2>9. Provenance and license</h2>
+<p>Extracted from a larger private formalization project; the extraction is
+import-closed (every internal dependency is in this repository) and builds standalone.
+Apache-2.0 (see <code>LICENSE</code>).</p>
+<p>Contact: Jorrit Velzeboer — jorrit@yom.net.</p></main></body></html>
