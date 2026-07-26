@@ -54,9 +54,12 @@ checked. The distance from "¬CEP on trust" to "¬CEP verified" is exactly this 
 non-hyperlinear group. §4 formalizes the reduction skeleton with its two open cores as named
 hypotheses, and §6 records exactly what the known attacks do and do not establish — so the
 difficulty is localized to statements one can quote. Section 7, by contrast, is closed.</p>
-<p><strong>What this does not do.</strong> It does not prove ¬CEP outright: the main theorem is conditional on
-the premise in §3 and says so. It does not reprove MIP*=RE. It does not show the
-complexity-free route succeeds.</p>
+<p><strong>What this does not do.</strong> It does not reprove MIP*=RE, and it does not show the
+complexity-free route succeeds. Nor does it prove ¬CEP from nothing: the main theorem rests on
+the premise of §3, so what is established is that ¬CEP follows, mechanically and at the ambient
+logic, from what MIP*=RE already provides. The entire remaining question is whether that premise
+faithfully states the published result — which is why it appears in full rather than in
+paraphrase.</p>
 <hr />
 <h2>2. Verified, assumed, open — what each word means here</h2>
 <p>These are three separate axes, and a claim about one says nothing about the others. Two of them
@@ -113,6 +116,13 @@ rather than a matter of assurance:</p>
 </tr>
 </tbody>
 </table>
+<p><strong>Two senses of "conditional", and the difference is the whole point.</strong> The main theorem of §3
+has no hypotheses: it concludes outright that a non-embeddable tracial state exists. What it
+depends on is an <em>axiom</em> — visible in <code>#print axioms</code>, not in the statement — recording a
+<strong>published</strong> theorem. The routes of §4 are conditional in the other sense: their assumptions sit
+in their signatures, and those assumptions are <strong>open problems</strong>. So one result is contingent on
+something the literature already supplies, and the other on something nobody can supply. Both are
+"conditional"; only the first is usable, and §6 explains why the second is not.</p>
 <p>The third column is empty by construction rather than by luck. Where the complexity-free routes
 once invoked unproved link lemmas inside their proofs — so that they <em>looked</em> like theorems while
 depending on <code>sorryAx</code>, and therefore established nothing — every such link is now a named
