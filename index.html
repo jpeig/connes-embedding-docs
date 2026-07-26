@@ -424,7 +424,13 @@ load-bearing dictionaries, and then prove</p>
 <pre><code>val_qa(G) &lt; val_qc(G)  →  kirchberg_game_separation_ucp_structured
 </code></pre>
 <p>after which the premise is no longer about traces and amenability at all, but about the value gap of
-one explicit finite game. The comparison with the other scenario is the point: formalizing the
+one explicit finite game: <code>val*(𝔊^SEP) ≤ 1/2</code> and <code>val^co(𝔊^SEP) = 1</code> for the game JNVWY construct
+in their Thm 12.10. That is a change of vocabulary as much as of size — a game is a finite question
+set, a finite answer set and a rule accepting some answer pairs, so the assumption becomes checkable
+against the source by a reader with no operator algebra at all, while the operator-algebraic half
+becomes proved rather than assumed. It does not become <em>computable</em>: <code>val^co = 1</code> needs an
+infinite-dimensional commuting strategy and the upper bound comes from the compression argument. The
+gain is legibility and localization, not decidability. The comparison with the other scenario is the point: formalizing the
 compression core is on the order of tens of person-years. The two conditions this development rests
 on are not equally expensive to discharge, and the operator-algebraic one is within reach.</p>
 <p><strong>Our rendering.</strong> This is the risk that is ours to control, and it does not make CEP true; it
