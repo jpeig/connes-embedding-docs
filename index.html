@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>An operator-algebraic proof that Connes embedding fails — machine-verified, one cited input, no gaps</title><link rel="stylesheet" href="style.css"><link rel="icon" href="favicon.svg"><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Operator algebra at the seam with undecidability — a machine-verified reduction for ¬CEP, and a map of the open group case</title><link rel="stylesheet" href="style.css"><link rel="icon" href="favicon.svg"><style>
 .landing{max-width:52em;margin:0 auto;padding:2rem 1.25rem 5rem;line-height:1.6}
 .landing h1{line-height:1.2;margin-bottom:.6rem}
 .landing h2{margin-top:2.2rem;padding-bottom:.3rem;border-bottom:1px solid rgba(128,128,128,.3)}
@@ -12,36 +12,47 @@
 .landing .apibar a{font-weight:600}
 .landing .note{font-size:.92em;opacity:.85}
 </style></head>
-<body><main class="landing"><h1 id="an-operator-algebraic-proof-that-connes-embedding-fails-machine-verified-one-cited-input-no-gaps">An operator-algebraic proof that Connes embedding fails — machine-verified, one cited input, no gaps</h1>
+<body><main class="landing"><h1 id="operator-algebra-at-the-seam-with-undecidability-a-machine-verified-reduction-for-cep-and-a-map-of-the-open-group-case">Operator algebra at the seam with undecidability — a machine-verified reduction for ¬CEP, and a map of the open group case</h1>
 <div class="apibar"><span><strong>Machine-checked Lean 4 formalization.</strong> Every declaration below is verified by the proof kernel.</span><a href="api.html">Browse the API &rarr;</a></div><p class="note"><em>The source repository is private; access on request (jorrit@yom.net). These pages show declaration statements and documentation, and are generated from the sources by doc-gen4.</em></p>
-<p><strong>Connes' embedding problem has a negative answer, and the operator-algebraic derivation of it
-is verified here in full by the Lean 4 kernel against Mathlib — from a synchronous-game
-separation down to a tracial state admitting no trace-preserving embedding into any matrix
-ultrapower. Exactly one input comes from outside operator algebra, the MIP*=RE separation, and
-it is cited rather than assumed away: <code>#print axioms</code> names it, and names nothing else beyond
-<code>propext</code>, <code>Classical.choice</code> and <code>Quot.sound</code>. No declaration in the development carries a
-<code>sorry</code>, so no theorem reports <code>sorryAx</code>.</strong></p>
+<p><strong>Connes' embedding problem is settled — MIP*=RE refutes it. What is not settled is the case
+the field cares about: whether a non-hyperlinear group exists. Two things are done here. The
+operator-algebraic derivation of ¬CEP is verified in full by the Lean 4 kernel against Mathlib,
+with the input from outside operator algebra isolated as one cited premise that <code>#print axioms</code>
+names and nothing else beyond <code>propext</code>, <code>Classical.choice</code> and <code>Quot.sound</code> — so the seam between
+logic and operator algebra becomes a formal object. And the routes toward the open group case are
+formalized with every open input carried as a hypothesis in the statement that uses it. No
+declaration in the development carries a <code>sorry</code>.</strong></p>
 <p><strong>Proof status, in four lines.</strong></p>
 <ul>
 <li><strong>Main theorem</strong> (§3): proved from Lean's three standard Mathlib axioms and the single
   domain-specific premise; no <code>sorryAx</code>.</li>
 <li><strong>That premise</strong>: a consequence of published theorems (JNVWY and the equivalences behind it),
   cited rather than reproved. Its complete formal statement is printed in §3.</li>
-<li><strong>Spectral truncations</strong> (§7): independent of CEP, and closed — the finite-stage Rieffel
+<li><strong>Spectral truncations</strong> (§8): independent of CEP, and closed — the finite-stage Rieffel
   compact-quantum-metric-space structure, using no domain-specific premise. Convergence to the
   limit is not claimed.</li>
-<li><strong>Complexity-free routes</strong> (§4–§6): separate from the main theorem, and conditional — every
+<li><strong>Complexity-free routes</strong> (§4, §7): separate from the main theorem, and conditional — every
   open input is an explicit hypothesis of the statement that uses it. No declaration in this
   development carries a <code>sorry</code>.</li>
 </ul>
 <hr />
 <h2 id="1-what-this-is-for">1. What this is for</h2>
 <p>The Connes Embedding Problem has had a negative answer since Ji–Natarajan–Vidick–Wright–Yuen
-proved MIP*=RE in 2020. The decisive argument is a construction about interactive proof
-systems, probabilistically checkable proofs and recursion theory. Its operator-algebraic
-consequence reaches the subject through a long chain of equivalences — the Kirchberg and
-Tsirelson correspondences, synchronous game algebras, amenable traces, u.c.p. lifting — and that
-chain has not been written out in a form where each step can be checked independently of the
+proved MIP*=RE in 2020. Two features of that answer shape everything here.</p>
+<p><strong>Its form.</strong> The separation is certified by a reduction from the halting problem: the argument
+shows a value gap exists without exhibiting an object that realises it. That shape is not
+incidental. Goldbring and Hart had shown seven years earlier that CEP is equivalent to a
+computability statement — the computability of the universal theory of every type II₁ von Neumann
+algebra (arXiv:1308.2638) — so a refutation by undecidability is, in hindsight, the expected one.
+The programme has continued in that register, and the same machinery has since been used outside
+operator algebras to refute the Aldous–Lyons conjecture (arXiv:2501.00173).</p>
+<p><strong>What it leaves open.</strong> CEP is false, but its case for group von Neumann algebras is not settled:
+whether a non-hyperlinear group exists remains unknown (arXiv:2109.12682). That is the question
+operator-algebraic methods are built to answer, and precisely the question an
+existence-by-undecidability certificate does not answer. Sections 4–6 are about that gap.</p>
+<p>This development works the operator-algebraic side of the seam. Its operator-algebraic interface —
+the Kirchberg and Tsirelson correspondences, synchronous game algebras, amenable traces, u.c.p.
+lifting — had not been written out in a form where each step can be checked independently of the
 complexity-theoretic construction.</p>
 <p>This development addresses that in three specific ways.</p>
 <p><strong>The operator-algebraic implication is checkable in full.</strong> Every step from the premise to the
@@ -55,8 +66,8 @@ verified refutation of CEP with no further work, because everything beneath it i
 checked. The distance from "¬CEP on trust" to "¬CEP verified" is exactly this one statement.</p>
 <p><strong>Where the difficulty sits is stated precisely.</strong> A complexity-free route needs an explicit
 non-hyperlinear group. §4 formalizes the reduction skeleton with its two open cores as named
-hypotheses, and §6 records exactly what the known attacks do and do not establish — so the
-difficulty is localized to statements one can quote. Section 7, by contrast, is closed.</p>
+hypotheses, and §7 records exactly what the known attacks do and do not establish — so the
+difficulty is localized to statements one can quote. Section 8, by contrast, is closed.</p>
 <p><strong>What this does not do.</strong> It does not reprove MIP*=RE, and it does not show the
 complexity-free route succeeds.</p>
 <p>What it <em>does</em> do is worth stating without hedging. The premise of §3 is not an open question: it
@@ -115,7 +126,7 @@ rather than a matter of assurance:</p>
 <td><strong>none</strong></td>
 </tr>
 <tr>
-<td><strong>Spectral truncations</strong> (§7)</td>
+<td><strong>Spectral truncations</strong> (§8)</td>
 <td>the finite-stage CQMS structure</td>
 <td>nothing beyond the ambient logic</td>
 <td><strong>none</strong></td>
@@ -129,7 +140,7 @@ records a <strong>published theorem</strong>. Cite-and-use is what every mathema
 work; the only unusual thing here is that the citation is <em>legible</em>, because the kernel forces it
 into a printed list instead of a bibliography entry.</p>
 <p>The routes of §4 are a different species. Their assumptions sit in their signatures, and those
-assumptions are <strong>open problems</strong> — nobody can supply them, as §6 explains. Calling both
+assumptions are <strong>open problems</strong> — nobody can supply them, as §7 explains. Calling both
 situations "conditional" would flatten the distinction that matters: one result stands on the
 literature, the other on things that do not yet exist.</p>
 <p>The third column is empty by construction rather than by luck. Where the complexity-free routes
@@ -267,7 +278,7 @@ mechanism and the same shared tail.</p>
 <p>The status of these two is precise, and it is stronger than it was. Both are complete conditional
 theorems: every open input appears in the signature, nothing is deferred to a <code>sorry</code>, and each
 closes at <code>[propext, Classical.choice, Quot.sound]</code>. Supply the hypotheses and ¬CEP follows
-mechanically. What §6 records is that nobody can currently supply <code>QCE_p</code> or <code>ACM</code>.</p>
+mechanically. What §7 records is that nobody can currently supply <code>QCE_p</code> or <code>ACM</code>.</p>
 <p>The fully proved fragment is the tempered subcategory in
 <a href="ZFib/External/OperatorAlgebra/CEP/TemperedGap.html"><code>TemperedGap.lean</code></a> — the 2×2 Gram
 positivity gap and the Deligne temperedness bound <code>2√p/(p+1) &lt; 1</code> — with no <code>sorry</code> and no
@@ -325,7 +336,7 @@ nowhere. These are the inputs, and the statement that consumes each one displays
 <tr>
 <td><code>QCE_p</code>, <code>ACM</code></td>
 <td>the two route cores</td>
-<td>A — see §6</td>
+<td>A — see §7</td>
 </tr>
 <tr>
 <td><code>CepGapStatement</code></td>
@@ -356,7 +367,63 @@ its list of assumptions contains no <code>sorryAx</code>.</p>
 the double <code>SL₂(ℤ) ∗_{Γ₀(p)} SL₂(ℤ)</code>. The Atkin–Lehner twist identifying it with <code>SL₂(ℤ[1/p])</code>
 is needed only to <em>prove</em> <code>QCE_p</code>, not for the conditional reduction.</p>
 <hr />
-<h2 id="6-what-the-complexity-free-routes-do-not-establish">6. What the complexity-free routes do not establish</h2>
+<h2 id="6-what-would-have-to-be-false">6. What would have to be false</h2>
+<p>Trust here rests on one cited premise, which invites the direct question: under what
+circumstances would this be wrong, and could CEP still be true? The premise is a mathematical
+statement — true or false independently of anyone's proof — so the question is whether the
+literature it renders is correct. Four scenarios, of which only two bear on CEP at all.</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Could CEP be true?</th>
+<th>What it does to this development</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>An error in the compression core of MIP*=RE</td>
+<td><strong>possibly yes</strong></td>
+<td>the theorem stays valid; its premise becomes vacuous</td>
+</tr>
+<tr>
+<td>An error in the equivalence chain to traces</td>
+<td><strong>possibly yes</strong></td>
+<td>MIP*=RE survives as a statement about interactive proofs; its operator-algebraic consequence does not</td>
+</tr>
+<tr>
+<td>Our premise does not faithfully render the literature</td>
+<td>no</td>
+<td>the theorem is correct but about something else</td>
+</tr>
+<tr>
+<td>An error in the verified implication</td>
+<td>no</td>
+<td>excluded by the kernel, modulo Lean's soundness</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The compression core.</strong> MIP*=RE rests on a recursive compression argument of considerable
+length that has not been formally verified. Note what the several available write-ups do <em>not</em>
+insure against: the Aldous–Lyons route reuses the same machinery, and the model-theoretic shortcut
+takes MIP*=RE as its input. One error in compression would affect all of them. Ruling that out
+means formalizing compression — a project of a different order from this one.</p>
+<p><strong>The equivalence chain.</strong> The passage from a value separation to a statement about traces runs
+through Kirchberg, the Tsirelson-problem equivalences and the synchronous-game dictionary. An error
+there would leave MIP*=RE intact while breaking its operator-algebraic consequence. These results
+are older, shorter and far more heavily used, so this is the less likely of the two — and the more
+tractable to formalize, which would shrink the premise to a statement about one explicit game.</p>
+<p><strong>Our rendering.</strong> This is the risk that is ours to control, and it does not make CEP true; it
+would make the theorem correct but about something else. Hence the premise is printed in full in
+§3 rather than paraphrased, its clauses are attributed separately, and its notion of amenability is
+pinned to Brown Thm 3.1.6(2) — unital completely positive maps with defect in the trace 2-norm —
+rather than a weaker variant, which would assume more than the cited results give.</p>
+<p>The asymmetry is the point. Only the first two scenarios could restore CEP, and neither is affected
+by anything here. What this development does is make the third auditable and the fourth
+unavailable: a reader who doubts ¬CEP has one statement to attack rather than a hundred and sixty
+pages, and a reader who accepts it has an audit trail from that statement to the conclusion.</p>
+<hr />
+<h2 id="7-what-the-complexity-free-routes-do-not-establish">7. What the complexity-free routes do not establish</h2>
 <p>These are limitations of specified arguments, not impossibility theorems.</p>
 <p>The section addresses a question that is still open. ¬CEP is settled, but its special case for
 group von Neumann algebras is not: whether a non-hyperlinear group exists remains unknown after
@@ -409,9 +476,9 @@ problem.</p>
 </ol>
 <p>The value gap MIP*=RE detects is not visible to these invariants. That is the reason for
 isolating the complexity input as one named premise rather than obscuring it. The implication
-in §3 is independent of every diagnosis in this section.</p>
+in §3 is independent of every diagnosis in that section.</p>
 <hr />
-<h2 id="7-spectral-truncations">7. Spectral truncations</h2>
+<h2 id="8-spectral-truncations">8. Spectral truncations</h2>
 <p>Independent of CEP, and complete: the finite stage of the spectral-truncation programme of
 Connes and van Suijlekom, machine-checked with no domain-specific premise. Let <code>S</code> be the unilateral shift on <code>ℓ²(ℕ)</code>, <code>N</code> the
 number operator, <code>Q_M = 1_{[0,M]}(N)</code> the cutoff projection, <code>S_M = Q_M S Q_M</code>, and
@@ -466,11 +533,11 @@ continuation, and the uniformity above is the first thing it would need.</p>
 <p>These statements rest on a small self-contained <code>ℓ²(ℕ)</code> substrate
 (<a href="ZFib/External/OperatorAlgebra/AnalyticClosure/TruncationSubstrate.html"><code>TruncationSubstrate.lean</code></a>).</p>
 <hr />
-<h2 id="8-what-can-be-inspected-here-and-what-re-checking-requires">8. What can be inspected here, and what re-checking requires</h2>
+<h2 id="9-what-can-be-inspected-here-and-what-re-checking-requires">9. What can be inspected here, and what re-checking requires</h2>
 <p>No Lean installation is needed to read the statements: every declaration named above has a page
 on this site, with its type, its documentation and links to each definition appearing in it.
 Tactic proofs are not shown.</p>
-<p>The certificates quoted in §3 and §7 are reported output of <code>#print axioms</code>. This site does not
+<p>The certificates quoted in §3 and §8 are reported output of <code>#print axioms</code>. This site does not
 reproduce them; a fresh kernel re-check requires the Lean sources, which are private and
 available on request. With those sources, three commands reproduce everything:</p>
 <pre><code class="language-bash">lake exe cache get
@@ -478,11 +545,11 @@ lake build
 lake env lean scripts/AxiomCheck.lean
 </code></pre>
 <p>The third prints the certificates and fails if the main theorem's list ever differs from the
-four entries in §3 — and likewise for the truncation certificates of §7 — so those lists are
+four entries in §3 — and likewise for the truncation certificates of §8 — so those lists are
 invariants rather than claims in prose. <code>grep -rn "^axiom" ZFib</code> returns a single line.</p>
 <p>Checked against Lean <code>v4.30.0-rc2</code> and Mathlib <code>1a5bbc7d3785</code>.</p>
 <hr />
-<h2 id="9-notes">9. Notes</h2>
+<h2 id="10-notes">10. Notes</h2>
 <p>Mathlib supplies the ambient analysis and algebra — C*-algebras, the continuous functional
 calculus, completely positive maps, Hilbert spaces, ultrafilters, matrix algebras — through 76
 imported modules. The objects this subject needs and Mathlib does not contain are constructed
