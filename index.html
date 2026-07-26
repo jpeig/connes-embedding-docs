@@ -27,8 +27,9 @@ Lean 4 kernel against Mathlib. Its list of assumptions contains <code>propext</c
 <li><strong>Spectral truncations</strong> (§7): independent of CEP, and closed — the finite-stage Rieffel
   compact-quantum-metric-space structure, using no domain-specific premise. Convergence to the
   limit is not claimed.</li>
-<li><strong>Complexity-free routes</strong> (§4–§6): separate from the main theorem, and dependent on
-  <code>sorryAx</code> through the 15 declarations named in §5.</li>
+<li><strong>Complexity-free routes</strong> (§4–§6): separate from the main theorem, and conditional — every
+  open input is an explicit hypothesis of the statement that uses it. No declaration in this
+  development carries a <code>sorry</code>.</li>
 </ul>
 <hr />
 <h2>1. What this is for</h2>
@@ -58,9 +59,9 @@ the premise in §3 and says so. It does not reprove MIP*=RE. It does not show th
 complexity-free route succeeds.</p>
 <hr />
 <h2>2. Verified, assumed, open — what each word means here</h2>
-<p>These are three separate axes, and a claim about one says nothing about the others. Since this
-development contains both a theorem with no gaps and fifteen openly declared gaps, the
-distinction is worth stating exactly.</p>
+<p>These are three separate axes, and a claim about one says nothing about the others. Two of them
+are now empty here — nothing is assumed except one premise, and nothing is left unfinished — so
+the distinction matters mainly for reading what the conditional routes of §4 do and do not say.</p>
 <p><strong>Verified</strong> means the kernel re-checked every inference. A Lean proof is not accepted because
 a program judged it plausible; it is re-checked by a small trusted core. If the development
 compiles, each <code>theorem</code> is a theorem of the ambient logic — <em>given the assumptions listed for
@@ -100,9 +101,9 @@ rather than a matter of assurance:</p>
 </tr>
 <tr>
 <td><strong>Complexity-free routes</strong> (§4)</td>
-<td>the final composition terms</td>
-<td>nothing; the two cores are hypotheses, not premises</td>
-<td>the 15 declarations of §5, reached transitively as <code>sorryAx</code></td>
+<td>the implications themselves, at the ambient logic</td>
+<td>nothing; every open input is a hypothesis</td>
+<td>nothing — no <code>sorry</code>, so no <code>sorryAx</code></td>
 </tr>
 <tr>
 <td><strong>Spectral truncations</strong> (§7)</td>
@@ -112,13 +113,16 @@ rather than a matter of assurance:</p>
 </tr>
 </tbody>
 </table>
-<p>So the fifteen gaps and the four-entry certificate are not in tension. The gaps belong to
-the exploratory routes, they are named individually in §5, and the main theorem's certificate
-is a mechanical proof that none of them can reach it. A gap in §4 is not a defect being
-managed; it is the frontier, written as a statement rather than an impression.</p>
-<p>One convention follows. The two open cores of §4 are carried as <strong>hypotheses</strong> of the displayed
-implications, so no theorem quietly acquires them: <code>qce_implies_cep_false</code> cannot be mistaken
-for a proof of ¬CEP, because its statement displays what it assumes.</p>
+<p>The third column is empty by construction rather than by luck. Where the complexity-free routes
+once invoked unproved link lemmas inside their proofs — so that they <em>looked</em> like theorems while
+depending on <code>sorryAx</code>, and therefore established nothing — every such link is now a named
+hypothesis of the statement that uses it. The two entry points consequently report</p>
+<pre><code>'ZFib.CEP.qce_implies_cep_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ZFib.CEP.acm_implies_cep_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+</code></pre>
+<p>and they say something true: <em>given these named inputs, a non-Connes-embeddable tracial state
+exists.</em> Neither can be mistaken for a proof of ¬CEP, because each displays exactly what it
+assumes. What is open is visible in a signature instead of hidden in a proof.</p>
 <hr />
 <h2>3. The main theorem and its single premise</h2>
 <p>The statement, in
@@ -204,6 +208,10 @@ is a proof here rather than a citation.</p>
 Formalized here is a reduction skeleton with the open cores as explicit hypotheses:</p>
 <p><strong>Rank one</strong> (<a href="ZFib/External/OperatorAlgebra/CEP/ConditionalChain.html"><code>ConditionalChain.lean</code></a>):</p>
 <pre><code class="language-lean">theorem qce_implies_cep_false (p : Nat) [Fact (Nat.Prime p)]
+    (hGlue : SerreVertexStabilityWithGluing (serreAmalgamData_p p))
+    (hExt : DVCentralExtensionAvailable p)
+    (hObstruction : DVObstructionAvailable p)
+    (hModel : FaithfulTracialGroupModelAvailable)
     (hQCE : QCE_p p) : ConnesNonEmbeddableWitness
 </code></pre>
 <p><code>QCE_p</code> is a dimension-uniform Hilbert–Schmidt rigidity statement on the congruence edge of the
@@ -211,120 +219,103 @@ Bass–Serre amalgam <code>SL₂(ℤ) ∗_{Γ₀(p)} SL₂(ℤ)</code>. From it:
 Dogon–Vigdorovich central-extension obstruction forcing a non-hyperlinear group, then the
 group–von-Neumann dictionary.</p>
 <p><strong>Higher rank</strong> (<a href="ZFib/External/OperatorAlgebra/CEP/HighRankChain.html"><code>HighRankChain.lean</code></a>):</p>
-<pre><code class="language-lean">theorem acm_implies_cep_false (L : HighRankLatticeData) (hACM : ACM L) :
-    ConnesNonEmbeddableWitness
+<pre><code class="language-lean">theorem acm_implies_cep_false (L : HighRankLatticeData)
+    (hStability : ACMImpliesStability L)
+    (hObstruction : HighRankObstruction L)
+    (hModel : FaithfulTracialGroupModelAvailable)
+    (hACM : ACM L) : ConnesNonEmbeddableWitness
 </code></pre>
 <p><code>ACM</code> (approximate congruence-monomiality) is the regular-sector half of flexible HS-stability
 for a higher-rank lattice; the rest uses the Dogon–Vigdorovich 2025 higher-rank (T;FD)
 mechanism and the same shared tail.</p>
-<p>The status of these two is precise. The displayed implications take <code>hQCE</code> and <code>hACM</code> as
-parameters, and their final composition terms contain no <code>sorry</code>. Their transitive dependency
-closures nevertheless contain <code>sorryAx</code>, through the unfinished supporting declarations listed
-in §5. They are therefore formal maps of proposed reductions, not completed conditional
-reductions. None of those declarations lies in the dependency closure of the theorem in §3.</p>
+<p>The status of these two is precise, and it is stronger than it was. Both are complete conditional
+theorems: every open input appears in the signature, nothing is deferred to a <code>sorry</code>, and each
+closes at <code>[propext, Classical.choice, Quot.sound]</code>. Supply the hypotheses and ¬CEP follows
+mechanically. What §6 records is that nobody can currently supply <code>QCE_p</code> or <code>ACM</code>.</p>
 <p>The fully proved fragment is the tempered subcategory in
 <a href="ZFib/External/OperatorAlgebra/CEP/TemperedGap.html"><code>TemperedGap.lean</code></a> — the 2×2 Gram
 positivity gap and the Deligne temperedness bound <code>2√p/(p+1) &lt; 1</code> — with no <code>sorry</code> and no
 domain-specific premise. It is a short place to read one complete proof.</p>
 <hr />
-<h2>5. Every gap, named</h2>
-<p>15 open declarations, in 6 files. Every <code>sorry</code> in the development lies in these files, each
-carrying a <code>-- TARGET:</code> comment at its site. Categories: <strong>(A)</strong> genuinely open hard core,
-<strong>(B)</strong> known in the literature, not proved here, <strong>(D)</strong> the statement itself needs work.</p>
+<h2>5. Every open input, named</h2>
+<p>Nothing in this development is left unfinished in the sense that matters mechanically: no
+declaration has a <code>sorry</code> body, so no theorem reports <code>sorryAx</code>. What the complexity-free routes
+still need is instead carried as named hypotheses, each a <code>Prop</code> stated in full and proved
+nowhere. These are the inputs, and the statement that consumes each one displays it:</p>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Declaration</th>
-<th>Category</th>
+<th>Open input</th>
+<th>What it asserts</th>
+<th>Status</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>CEP/ConditionalChain.lean</code></td>
-<td><code>sl2z_flexibleHSStable_for_serreVertex</code></td>
-<td>B (virtually free ⟹ flexibly HS-stable)</td>
+<td><code>SerreVertexStabilityWithGluing</code></td>
+<td>flexible HS-stability of the vertex group <code>SL₂(ℤ)</code> <strong>together with</strong> a recombination principle at the <em>same</em> modulus</td>
+<td>B — a relative-stability theorem for the amalgam</td>
 </tr>
 <tr>
-<td></td>
-<td><code>approxCloseToExact_of_serre_recombination</code></td>
-<td><strong>D</strong> — underdetermined as stated: <code>delta</code> is not related to <code>eps</code> by any hypothesis, while the conclusion asks for closeness on all of the amalgam. Recombination needs a uniform relative-stability input, not normal-form bookkeeping</td>
-</tr>
-<tr>
-<td></td>
-<td><code>dogonVigdorovich_centralExtensionData</code></td>
-<td>B (the DV central extension, constructed)</td>
-</tr>
-<tr>
-<td></td>
-<td><code>dogonVigdorovich_not_hyperlinear_of_flexibleHSStable</code></td>
-<td>A/B (the DV obstruction argument)</td>
-</tr>
-<tr>
-<td></td>
-<td><code>exists_faithfulTracialGroupModel</code></td>
-<td>B — the shared tail's only remaining gap; the dictionary direction itself is proved. Needs the reduced group C*-algebra, which the pinned Mathlib does not provide, so it means building the regular-representation completion and its canonical trace</td>
-</tr>
-<tr>
-<td><code>CEP/HighRankChain.lean</code></td>
-<td><code>acm_implies_flexibleHSStable</code></td>
-<td>A (assembles the open core into stability)</td>
-</tr>
-<tr>
-<td></td>
-<td><code>highRank_flexibleHSStable_implies_nonHyperlinear</code></td>
-<td>B (DV 2025 (T;FD) theorem)</td>
-</tr>
-<tr>
-<td><code>CEP/Basic.lean</code></td>
-<td><code>finiteDimCStar_approx_matrix_model</code></td>
-<td>B (Artin–Wedderburn with trace-weight approximation)</td>
-</tr>
-<tr>
-<td></td>
-<td><code>cep_gap_lemma_target</code></td>
-<td>A (the C*-native game gap, complexity-free form)</td>
-</tr>
-<tr>
-<td><code>CEP/IRSDictionary.lean</code></td>
-<td><code>coHyperlinear_iff_connesEmbeddable</code></td>
-<td>B (Manzoor, arXiv:2502.06697)</td>
-</tr>
-<tr>
-<td></td>
-<td><code>coHyperlinear_dirac_iff_quotient_hyperlinear</code></td>
+<td><code>DVCentralExtensionAvailable</code></td>
+<td>the Dogon–Vigdorovich central extension of <code>Γ_p</code>, constructed</td>
 <td>B</td>
 </tr>
 <tr>
-<td></td>
-<td><code>cosofic_implies_cohyperlinear</code></td>
+<td><code>DVObstructionAvailable</code></td>
+<td>flexible HS-stability forces the extension to be non-hyperlinear</td>
+<td>A/B — the DV obstruction argument</td>
+</tr>
+<tr>
+<td><code>FaithfulTracialGroupModelAvailable</code></td>
+<td>every countable group has a faithful tracial C*-model</td>
+<td>B — needs the reduced group C*-algebra, which the pinned Mathlib does not provide</td>
+</tr>
+<tr>
+<td><code>ACMImpliesStability</code></td>
+<td>approximate congruence-monomiality yields flexible HS-stability</td>
+<td>A — assembles the open core</td>
+</tr>
+<tr>
+<td><code>HighRankObstruction</code></td>
+<td>the Dogon–Vigdorovich 2025 higher-rank (T;FD) step</td>
 <td>B</td>
 </tr>
 <tr>
-<td><code>CEP/HyperlinearRadical.lean</code></td>
-<td><code>noAmenableTrace_iff_inHyperlinearRadical</code> (⟹ only)</td>
-<td>A (⟸ is proved)</td>
-</tr>
-<tr>
-<td><code>Substrate/TracialUltrapower.lean</code></td>
-<td><code>exists_hyperfiniteII1Factor</code></td>
+<td><code>FiniteDimApproxFor</code></td>
+<td>Artin–Wedderburn with trace-weight approximation, per model</td>
 <td>B</td>
 </tr>
 <tr>
-<td></td>
-<td><code>germ_cstar_trace_descent</code></td>
-<td>A (the analytic ultrapower descent)</td>
+<td><code>QCE_p</code>, <code>ACM</code></td>
+<td>the two route cores</td>
+<td>A — see §6</td>
+</tr>
+<tr>
+<td><code>CepGapStatement</code></td>
+<td>the complexity-free C*-native game gap</td>
+<td>A — the open problem itself; assumed by nothing, used by nothing</td>
 </tr>
 </tbody>
 </table>
-<p>None of these occurs in the dependency closure of the theorem in §3. That is not a promise but
-a mechanical fact: its list of assumptions contains no <code>sorryAx</code>.</p>
-<p>The category <strong>D</strong> entry is worth stating plainly rather than leaving it filed as plumbing: the
-declaration cannot be proved as written, and closing it means strengthening its hypotheses to a
-genuine uniform stability statement for the amalgam. Two declarations that were open here — an
-isolated trace-seminorm computation, and an unused alternative route through germ amenability —
-are now respectively proved and removed, and the classical Serre <em>Trees</em> material that no
-theorem consumed has been deleted rather than carried as debt.</p>
+<p>Two of these deserve comment.</p>
+<p><strong>The vertex stability and the recombination are one input, not two.</strong> They were previously two
+declarations, and splitting them was unsound: the recombination lemma quantified its
+multiplicative-defect bound with no relation to the accuracy budgets, and in that form the claim
+is false — take the trivial representation on both vertex copies and the value <code>-1</code> on an
+alternating reduced word outside either vertex subgroup, and every hypothesis holds while the
+conclusion fails. Sharing one modulus between the vertex repair and the recombination is the
+mathematical content a genuine relative-stability theorem for the amalgam would supply, so that
+is what the hypothesis now says.</p>
+<p><strong><code>CepGapStatement</code> is a <code>Prop</code>, not a theorem.</strong> A proof of it would give ¬CEP without
+MIP*=RE. Nothing here proves it, nothing assumes it, and no result depends on it; it is recorded
+because naming the target precisely is worth more than leaving it implicit.</p>
+<p>Declarations that no theorem consumed are gone rather than documented: three statements from the
+IRS dictionary, an <code>iff</code> packaging over an already-proved direction, existence of the hyperfinite
+II₁ factor, a germ-amenability route, and the classical Serre <em>Trees</em> material. One isolated
+trace-seminorm computation that had been left open is now proved.</p>
+<p>None of the above touches the theorem of §3, which is a mechanical fact rather than a promise:
+its list of assumptions contains no <code>sorryAx</code>.</p>
 <p>One point of fidelity: the amalgam's right edge inclusion is untwisted, so the formal object is
 the double <code>SL₂(ℤ) ∗_{Γ₀(p)} SL₂(ℤ)</code>. The Atkin–Lehner twist identifying it with <code>SL₂(ℤ[1/p])</code>
 is needed only to <em>prove</em> <code>QCE_p</code>, not for the conditional reduction.</p>
