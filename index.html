@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The negative Connes Embedding Problem, machine-checked, with the complexity-theoretic input isolated as a single premise</title><link rel="stylesheet" href="style.css"><link rel="icon" href="favicon.svg"><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>API documentation</title><link rel="stylesheet" href="style.css"><link rel="icon" href="favicon.svg"><style>
 .landing{max-width:52em;margin:0 auto;padding:2rem 1.25rem 5rem;line-height:1.6}
 .landing h1{line-height:1.2;margin-bottom:.6rem}
 .landing h2{margin-top:2.2rem;padding-bottom:.3rem;border-bottom:1px solid rgba(128,128,128,.3)}
@@ -12,7 +12,7 @@
 .landing .apibar a{font-weight:600}
 .landing .note{font-size:.92em;opacity:.85}
 </style></head>
-<body><main class="landing"><h1>The negative Connes Embedding Problem, machine-checked, with the complexity-theoretic input isolated as a single premise</h1>
+<body><main class="landing"><h1 id="the-negative-connes-embedding-problem-machine-checked-with-the-complexity-theoretic-input-isolated-as-a-single-premise">The negative Connes Embedding Problem, machine-checked, with the complexity-theoretic input isolated as a single premise</h1>
 <div class="apibar"><span><strong>Machine-checked Lean 4 formalization.</strong> Every declaration below is verified by the proof kernel.</span><a href="api.html">Browse the API &rarr;</a></div><p class="note"><em>The source repository is private; access on request (jorrit@yom.net). These pages show declaration statements and documentation, and are generated from the sources by doc-gen4.</em></p>
 <p><strong>The operator-algebraic implication — from a structured synchronous-game premise to a tracial
 state admitting no trace-preserving embedding into a matrix ultrapower — is verified by the
@@ -33,7 +33,7 @@ Lean 4 kernel against Mathlib. Its list of assumptions contains <code>propext</c
   development carries a <code>sorry</code>.</li>
 </ul>
 <hr />
-<h2>1. What this is for</h2>
+<h2 id="1-what-this-is-for">1. What this is for</h2>
 <p>The Connes Embedding Problem has had a negative answer since Ji–Natarajan–Vidick–Wright–Yuen
 proved MIP*=RE in 2020. The decisive argument is a construction about interactive proof
 systems, probabilistically checkable proofs and recursion theory. Its operator-algebraic
@@ -65,7 +65,7 @@ rather than reproving it. The residual question is not whether the input is true
 statement in §3 renders it faithfully; that entailment is assembled by hand rather than by the
 kernel, which is why the statement is printed in full rather than paraphrased.</p>
 <hr />
-<h2>2. Verified, assumed, open — what each word means here</h2>
+<h2 id="2-verified-assumed-open-what-each-word-means-here">2. Verified, assumed, open — what each word means here</h2>
 <p>These are three separate axes, and a claim about one says nothing about the others. Two of them
 are now empty here — nothing is assumed except one premise, and nothing is left unfinished — so
 the distinction matters mainly for reading what the conditional routes of §4 do and do not say.</p>
@@ -141,7 +141,7 @@ hypothesis of the statement that uses it. The two entry points consequently repo
 exists.</em> Neither can be mistaken for a proof of ¬CEP, because each displays exactly what it
 assumes. What is open is visible in a signature instead of hidden in a proof.</p>
 <hr />
-<h2>3. The main theorem and its single premise</h2>
+<h2 id="3-the-main-theorem-and-its-single-premise">3. The main theorem and its single premise</h2>
 <p>The statement, in
 <a href="ZFib/External/OperatorAlgebra/CEP/Faithful/FaithfulSingleCapstone.html"><code>FaithfulSingleCapstone.lean</code></a>:</p>
 <pre><code class="language-lean">theorem cep_false_operator_algebraic_single_scaffold :
@@ -229,7 +229,7 @@ is a proof here rather than a citation.</p>
 <p>Three entries of ambient logic, one domain-specific premise. There is no fifth entry and no
 <code>sorryAx</code>.</p>
 <hr />
-<h2>4. The complexity-free routes</h2>
+<h2 id="4-the-complexity-free-routes">4. The complexity-free routes</h2>
 <p>Can ¬CEP be reached without MIP*=RE, by exhibiting a non-hyperlinear group? That is open.
 Formalized here is a reduction skeleton with the open cores as explicit hypotheses:</p>
 <p><strong>Rank one</strong> (<a href="ZFib/External/OperatorAlgebra/CEP/ConditionalChain.html"><code>ConditionalChain.lean</code></a>):</p>
@@ -263,7 +263,7 @@ mechanically. What §6 records is that nobody can currently supply <code>QCE_p</
 positivity gap and the Deligne temperedness bound <code>2√p/(p+1) &lt; 1</code> — with no <code>sorry</code> and no
 domain-specific premise. It is a short place to read one complete proof.</p>
 <hr />
-<h2>5. Every open input, named</h2>
+<h2 id="5-every-open-input-named">5. Every open input, named</h2>
 <p>Nothing in this development is left unfinished in the sense that matters mechanically: no
 declaration has a <code>sorry</code> body, so no theorem reports <code>sorryAx</code>. What the complexity-free routes
 still need is instead carried as named hypotheses, each a <code>Prop</code> stated in full and proved
@@ -346,7 +346,7 @@ its list of assumptions contains no <code>sorryAx</code>.</p>
 the double <code>SL₂(ℤ) ∗_{Γ₀(p)} SL₂(ℤ)</code>. The Atkin–Lehner twist identifying it with <code>SL₂(ℤ[1/p])</code>
 is needed only to <em>prove</em> <code>QCE_p</code>, not for the conditional reduction.</p>
 <hr />
-<h2>6. What the complexity-free routes do not establish</h2>
+<h2 id="6-what-the-complexity-free-routes-do-not-establish">6. What the complexity-free routes do not establish</h2>
 <p>These are limitations of specified arguments, not impossibility theorems.</p>
 <ol>
 <li>
@@ -394,7 +394,7 @@ is needed only to <em>prove</em> <code>QCE_p</code>, not for the conditional red
 isolating the complexity input as one named premise rather than obscuring it. The implication
 in §3 is independent of every diagnosis in this section.</p>
 <hr />
-<h2>7. Spectral truncations</h2>
+<h2 id="7-spectral-truncations">7. Spectral truncations</h2>
 <p>Independent of CEP, and complete: the finite stage of the spectral-truncation programme of
 Connes and van Suijlekom, machine-checked with no domain-specific premise. Let <code>S</code> be the unilateral shift on <code>ℓ²(ℕ)</code>, <code>N</code> the
 number operator, <code>Q_M = 1_{[0,M]}(N)</code> the cutoff projection, <code>S_M = Q_M S Q_M</code>, and
@@ -444,7 +444,7 @@ continuation.</p>
 <p>These statements rest on a small self-contained <code>ℓ²(ℕ)</code> substrate
 (<a href="ZFib/External/OperatorAlgebra/AnalyticClosure/TruncationSubstrate.html"><code>TruncationSubstrate.lean</code></a>).</p>
 <hr />
-<h2>8. What can be inspected here, and what re-checking requires</h2>
+<h2 id="8-what-can-be-inspected-here-and-what-re-checking-requires">8. What can be inspected here, and what re-checking requires</h2>
 <p>No Lean installation is needed to read the statements: every declaration named above has a page
 on this site, with its type, its documentation and links to each definition appearing in it.
 Tactic proofs are not shown.</p>
@@ -460,7 +460,7 @@ four entries in §3 — and likewise for the truncation certificates of §7 — 
 invariants rather than claims in prose. <code>grep -rn "^axiom" ZFib</code> returns a single line.</p>
 <p>Checked against Lean <code>v4.30.0-rc2</code> and Mathlib <code>1a5bbc7d3785</code>.</p>
 <hr />
-<h2>9. Notes</h2>
+<h2 id="9-notes">9. Notes</h2>
 <p>Mathlib supplies the ambient analysis and algebra — C*-algebras, the continuous functional
 calculus, completely positive maps, Hilbert spaces, ultrafilters, matrix algebras — through 76
 imported modules. The objects this subject needs and Mathlib does not contain are constructed
