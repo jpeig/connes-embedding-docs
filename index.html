@@ -439,10 +439,15 @@ modulo cutoff scalars); and closedness of that unit ball.</p>
 'ZFib.Theorems.FibOSAllCoordinateKernel.fullBandAllCoordinatesKernelR1_committed' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 </code></pre>
-<p>Nothing in this section rests on an unproved premise. <strong>Gromov–Hausdorff convergence of the
-truncated state spaces is not claimed</strong>: the finite stage is closed, and transplanting the <code>S¹</code>
-Fejér argument of Connes–van Suijlekom to obtain convergence to the limit is the natural
-continuation.</p>
+<p>Nothing in this section rests on an unproved premise. Two limits of the result, stated here
+rather than left to be discovered:</p>
+<p><strong>The constants are per stage, not uniform in <code>M</code>.</strong> The norm-equivalence supplies, for each
+fixed <code>M</code>, some <code>C_M &gt; 0</code> with <code>‖a'‖ ≤ C_M · L_M(a)</code> on the off-diagonal complement. Nothing
+here bounds <code>C_M</code> as <code>M → ∞</code>. That suffices for the finite stage and is exactly what does <em>not</em>
+suffice for a limit argument, where uniform control is the whole difficulty.</p>
+<p><strong>Gromov–Hausdorff convergence of the truncated state spaces is not claimed.</strong> Transplanting the
+<code>S¹</code> Fejér argument of Connes–van Suijlekom to obtain convergence to the limit is the natural
+continuation, and the uniformity above is the first thing it would need.</p>
 <p>These statements rest on a small self-contained <code>ℓ²(ℕ)</code> substrate
 (<a href="ZFib/External/OperatorAlgebra/AnalyticClosure/TruncationSubstrate.html"><code>TruncationSubstrate.lean</code></a>).</p>
 <hr />
