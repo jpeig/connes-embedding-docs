@@ -202,7 +202,7 @@ each deserves its own citation rather than a collective label:</p>
 </tr>
 <tr>
 <td>a perfect <strong>qc</strong> strategy ⟺ a tracial state on <code>C*(F(n,m))</code> with the right values</td>
-<td>prior work, cited as [PSS⁺16] in Kim–Paulsen–Schafhauser §3 and stated there in prose — <em>not</em> a numbered result of that paper</td>
+<td>Paulsen–Severini–Stahlke–Todorov–Winter, <em>Estimating quantum chromatic numbers</em>, J. Funct. Anal. 270 (2016), <strong>Thm 5.5 / Cor. 5.6</strong> — restated in prose in Kim–Paulsen–Schafhauser §3, and <em>not</em> a sub-item of their Thm 3.6</td>
 </tr>
 <tr>
 <td>a perfect <strong>qa</strong> strategy ⟺ an <strong>amenable</strong> trace on <code>C*(F(n,m))</code></td>
@@ -214,6 +214,12 @@ each deserves its own citation rather than a collective label:</p>
 </tr>
 </tbody>
 </table>
+<p>Not every citation above is load-bearing. To <em>derive</em> this premise from a bare value gap for one
+explicit synchronous game, only two are needed — the qc dictionary (Paulsen–Severini–Stahlke–
+Todorov–Winter) and the qa dictionary (Kim–Paulsen–Schafhauser), with Brown fixing the notion of
+amenability. Kirchberg's QWEP equivalence, the Fritz and Junge et al. Tsirelson equivalences and
+Dykema–Paulsen's Thm 3.7 situate the result historically but are not required for that single-game
+route. That matters for what it would take to remove the premise altogether; see §6.</p>
 <p>Two points a referee should know. First, the u.c.p. requirement in the last row is exactly what
 <code>IsAmenableTraceUCP</code> encodes, so the premise assumes the literature's notion and not a stronger
 one. An earlier packaging of this development assumed a <em>non</em>-u.c.p. notion of amenable trace,
@@ -411,8 +417,16 @@ means formalizing compression — a project of a different order from this one.<
 <p><strong>The equivalence chain.</strong> The passage from a value separation to a statement about traces runs
 through Kirchberg, the Tsirelson-problem equivalences and the synchronous-game dictionary. An error
 there would leave MIP*=RE intact while breaking its operator-algebraic consequence. These results
-are older, shorter and far more heavily used, so this is the less likely of the two — and the more
-tractable to formalize, which would shrink the premise to a statement about one explicit game.</p>
+are older, shorter and far more heavily used, so this is the less likely of the two — and it is also,
+by a wide margin, the cheaper to close. A scoping pass puts the minimal path at roughly <strong>9–18
+person-months</strong>: construct the free product <code>∗ₓ ℂᵐ</code> with its universal property, formalize the two
+load-bearing dictionaries, and then prove</p>
+<pre><code>val_qa(G) &lt; val_qc(G)  →  kirchberg_game_separation_ucp_structured
+</code></pre>
+<p>after which the premise is no longer about traces and amenability at all, but about the value gap of
+one explicit finite game. The comparison with the other scenario is the point: formalizing the
+compression core is on the order of tens of person-years. The two conditions this development rests
+on are not equally expensive to discharge, and the operator-algebraic one is within reach.</p>
 <p><strong>Our rendering.</strong> This is the risk that is ours to control, and it does not make CEP true; it
 would make the theorem correct but about something else. Hence the premise is printed in full in
 §3 rather than paraphrased, its clauses are attributed separately, and its notion of amenability is
@@ -420,8 +434,8 @@ pinned to Brown Thm 3.1.6(2) — unital completely positive maps with defect in 
 rather than a weaker variant, which would assume more than the cited results give.</p>
 <p>The asymmetry is the point. Only the first two scenarios could restore CEP, and neither is affected
 by anything here. What this development does is make the third auditable and the fourth
-unavailable: a reader who doubts ¬CEP has one statement to attack rather than a hundred and sixty
-pages, and a reader who accepts it has an audit trail from that statement to the conclusion.</p>
+unavailable: a reader who doubts ¬CEP has one statement to attack rather than a paper of over two
+hundred pages, and a reader who accepts it has an audit trail from that statement to the conclusion.</p>
 <hr />
 <h2 id="7-what-the-complexity-free-routes-do-not-establish">7. What the complexity-free routes do not establish</h2>
 <p>These are limitations of specified arguments, not impossibility theorems.</p>
