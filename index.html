@@ -23,7 +23,8 @@ Lean 4 kernel against Mathlib. Its list of assumptions contains <code>propext</c
 <ul>
 <li><strong>Main theorem</strong> (§3): proved from Lean's three standard Mathlib axioms and the single
   domain-specific premise; no <code>sorryAx</code>.</li>
-<li><strong>That premise</strong>: its complete formal statement is printed in §3. It is not proved here.</li>
+<li><strong>That premise</strong>: a consequence of published theorems (JNVWY and the equivalences behind it),
+  cited rather than reproved. Its complete formal statement is printed in §3.</li>
 <li><strong>Spectral truncations</strong> (§7): independent of CEP, and closed — the finite-stage Rieffel
   compact-quantum-metric-space structure, using no domain-specific premise. Convergence to the
   limit is not claimed.</li>
@@ -55,11 +56,14 @@ non-hyperlinear group. §4 formalizes the reduction skeleton with its two open c
 hypotheses, and §6 records exactly what the known attacks do and do not establish — so the
 difficulty is localized to statements one can quote. Section 7, by contrast, is closed.</p>
 <p><strong>What this does not do.</strong> It does not reprove MIP*=RE, and it does not show the
-complexity-free route succeeds. Nor does it prove ¬CEP from nothing: the main theorem rests on
-the premise of §3, so what is established is that ¬CEP follows, mechanically and at the ambient
-logic, from what MIP*=RE already provides. The entire remaining question is whether that premise
-faithfully states the published result — which is why it appears in full rather than in
-paraphrase.</p>
+complexity-free route succeeds.</p>
+<p>What it <em>does</em> do is worth stating without hedging. The premise of §3 is not an open question: it
+is a consequence of published, accepted results. Everything from that premise down to a
+non-Connes-embeddable tracial state is verified by the kernel. So ¬CEP is machine-checked here
+modulo one cited input — the ordinary position of any argument that invokes a prior theorem
+rather than reproving it. The residual question is not whether the input is true, but whether the
+statement in §3 renders it faithfully; that entailment is assembled by hand rather than by the
+kernel, which is why the statement is printed in full rather than paraphrased.</p>
 <hr />
 <h2>2. Verified, assumed, open — what each word means here</h2>
 <p>These are three separate axes, and a claim about one says nothing about the others. Two of them
@@ -116,13 +120,16 @@ rather than a matter of assurance:</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Two senses of "conditional", and the difference is the whole point.</strong> The main theorem of §3
-has no hypotheses: it concludes outright that a non-embeddable tracial state exists. What it
-depends on is an <em>axiom</em> — visible in <code>#print axioms</code>, not in the statement — recording a
-<strong>published</strong> theorem. The routes of §4 are conditional in the other sense: their assumptions sit
-in their signatures, and those assumptions are <strong>open problems</strong>. So one result is contingent on
-something the literature already supplies, and the other on something nobody can supply. Both are
-"conditional"; only the first is usable, and §6 explains why the second is not.</p>
+<p><strong>A citation is not an open problem, and the two must not be read alike.</strong> The main theorem of
+§3 has no hypotheses: it concludes outright that a non-embeddable tracial state exists. What it
+depends on is an <em>axiom</em> — visible in <code>#print axioms</code>, not in the statement — and that axiom
+records a <strong>published theorem</strong>. Cite-and-use is what every mathematical argument does with prior
+work; the only unusual thing here is that the citation is <em>legible</em>, because the kernel forces it
+into a printed list instead of a bibliography entry.</p>
+<p>The routes of §4 are a different species. Their assumptions sit in their signatures, and those
+assumptions are <strong>open problems</strong> — nobody can supply them, as §6 explains. Calling both
+situations "conditional" would flatten the distinction that matters: one result stands on the
+literature, the other on things that do not yet exist.</p>
 <p>The third column is empty by construction rather than by luck. Where the complexity-free routes
 once invoked unproved link lemmas inside their proofs — so that they <em>looked</em> like theorems while
 depending on <code>sorryAx</code>, and therefore established nothing — every such link is now a named
@@ -169,24 +176,28 @@ each deserves its own citation rather than a collective label:</p>
 </thead>
 <tbody>
 <tr>
-<td><code>C_qa ⊊ C_qc</code> — a separating synchronous game exists</td>
-<td>Ji–Natarajan–Vidick–Wright–Yuen, <em>MIP*=RE</em>, arXiv:2001.04383</td>
+<td>a finite <strong>synchronous</strong> game separating the quantum-commuting from the quantum-approximate correlations</td>
+<td>Ji–Natarajan–Vidick–Wright–Yuen, arXiv:2001.04383: <strong>Theorem 12.10</strong> ("An explicit separation") gives <code>val*(𝔊^SEP) ≤ 1/2</code> and <code>val^co(𝔊^SEP) = 1</code>; <strong>Theorem 12.6</strong> is the underlying dichotomy and <strong>Corollary 12.9</strong> is MIP*=RE itself. Synchronicity of the game is stated in §1.2 and §1.4</td>
 </tr>
 <tr>
-<td>the correlation-set separation is equivalent to ¬CEP</td>
-<td>Fritz, arXiv:1008.1168; Junge–Navascués–Palazuelos–Pérez-García–Scholz–Werner, arXiv:1008.1142</td>
+<td>that separation is equivalent to ¬CEP</td>
+<td>Fritz, arXiv:1008.1168; Junge–Navascués–Palazuelos–Pérez-García–Scholz–Werner, arXiv:1008.1142 — the implication JNVWY invokes for CEP in its §1.3</td>
 </tr>
 <tr>
 <td>the same equivalence restricted to <em>synchronous</em> correlations</td>
-<td>Dykema–Paulsen, arXiv:1503.07207, Thm 3.7</td>
+<td>Dykema–Paulsen, arXiv:1503.07207, <strong>Thm 3.7</strong></td>
 </tr>
 <tr>
-<td>a perfect qc strategy ⟺ a trace on <code>C*(F(n,m))</code>; a perfect qa strategy ⟺ an <strong>amenable</strong> trace</td>
-<td>Kim–Paulsen–Schafhauser, arXiv:1707.01016, Thm 3.6</td>
+<td>a perfect <strong>qc</strong> strategy ⟺ a tracial state on <code>C*(F(n,m))</code> with the right values</td>
+<td>prior work, cited as [PSS⁺16] in Kim–Paulsen–Schafhauser §3 and stated there in prose — <em>not</em> a numbered result of that paper</td>
 </tr>
 <tr>
-<td>"amenable trace" = approximable by <strong>unital completely positive</strong> maps into matrix algebras</td>
-<td>Connes/Kirchberg, as characterized in Brown, arXiv:math/0304009, Thms 3.1.6–3.1.7</td>
+<td>a perfect <strong>qa</strong> strategy ⟺ an <strong>amenable</strong> trace on <code>C*(F(n,m))</code></td>
+<td>Kim–Paulsen–Schafhauser, arXiv:1707.01016, <strong>Thm 3.6(3)</strong>; the game-level form is their Cor. 3.7</td>
+</tr>
+<tr>
+<td>"amenable trace" = approximable by <strong>unital completely positive</strong> maps into matrix algebras, with defect measured in the trace 2-norm</td>
+<td>Brown, arXiv:math/0304009, <strong>Thm 3.1.6(2)</strong>: "there exists a sequence of u.c.p. maps <code>φ_n : A → M_{k(n)}(ℂ)</code> such that <code>‖φ_n(ab) − φ_n(a)φ_n(b)‖₂ → 0</code> and <code>τ(a) = lim tr_{k(n)} ∘ φ_n(a)</code>"</td>
 </tr>
 </tbody>
 </table>
@@ -200,7 +211,12 @@ Second, the trace is asserted to live on the universal free product <code>C*(F(n
 than on a game-specific quotient; that is the form Kim–Paulsen–Schafhauser's Thm 3.6 states, so
 it tracks the literature rather than strengthening it.</p>
 <p>Checking that the statement above says what those papers actually provide is the one piece of
-mathematics a reader must do by hand. Everything downstream of it is verified — including
+mathematics a reader must do by hand. Two details worth knowing before doing it. JNVWY state the
+strict inclusion and the CEP consequence in prose in §1.3 rather than as numbered corollaries —
+the numbered results are those listed above — so the chain to ¬CEP runs through Fritz and Junge
+et al. rather than through a single citable line. And the qc half of the dictionary is <em>not</em> part
+of Kim–Paulsen–Schafhauser's Theorem 3.6: only the qa half is, as item (3); the qc half is
+earlier work they restate in prose. Everything downstream of it is verified — including
 <strong>free-product permanence of approximate u.c.p. liftability</strong>, proved internally as
 <code>bocaFreeProductPermanence_holds_internal</code>; the classical content it re-derives is due to Boca,
 <em>Free products of completely positive maps and spectral sets</em>, J. Funct. Anal. 97 (1991), and it
