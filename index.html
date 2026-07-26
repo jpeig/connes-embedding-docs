@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>API documentation</title><link rel="stylesheet" href="style.css"><link rel="icon" href="favicon.svg"><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>An operator-algebraic proof that Connes embedding fails — machine-verified, one cited input, no gaps</title><link rel="stylesheet" href="style.css"><link rel="icon" href="favicon.svg"><style>
 .landing{max-width:52em;margin:0 auto;padding:2rem 1.25rem 5rem;line-height:1.6}
 .landing h1{line-height:1.2;margin-bottom:.6rem}
 .landing h2{margin-top:2.2rem;padding-bottom:.3rem;border-bottom:1px solid rgba(128,128,128,.3)}
@@ -12,13 +12,15 @@
 .landing .apibar a{font-weight:600}
 .landing .note{font-size:.92em;opacity:.85}
 </style></head>
-<body><main class="landing"><h1 id="the-negative-connes-embedding-problem-machine-checked-with-the-complexity-theoretic-input-isolated-as-a-single-premise">The negative Connes Embedding Problem, machine-checked, with the complexity-theoretic input isolated as a single premise</h1>
+<body><main class="landing"><h1 id="an-operator-algebraic-proof-that-connes-embedding-fails-machine-verified-one-cited-input-no-gaps">An operator-algebraic proof that Connes embedding fails — machine-verified, one cited input, no gaps</h1>
 <div class="apibar"><span><strong>Machine-checked Lean 4 formalization.</strong> Every declaration below is verified by the proof kernel.</span><a href="api.html">Browse the API &rarr;</a></div><p class="note"><em>The source repository is private; access on request (jorrit@yom.net). These pages show declaration statements and documentation, and are generated from the sources by doc-gen4.</em></p>
-<p><strong>The operator-algebraic implication — from a structured synchronous-game premise to a tracial
-state admitting no trace-preserving embedding into a matrix ultrapower — is verified by the
-Lean 4 kernel against Mathlib. Its list of assumptions contains <code>propext</code>,
-<code>Classical.choice</code>, <code>Quot.sound</code>, and exactly one domain-specific premise,
-<code>kirchberg_game_separation_ucp_structured</code>. It contains no <code>sorryAx</code>.</strong></p>
+<p><strong>Connes' embedding problem has a negative answer, and the operator-algebraic derivation of it
+is verified here in full by the Lean 4 kernel against Mathlib — from a synchronous-game
+separation down to a tracial state admitting no trace-preserving embedding into any matrix
+ultrapower. Exactly one input comes from outside operator algebra, the MIP*=RE separation, and
+it is cited rather than assumed away: <code>#print axioms</code> names it, and names nothing else beyond
+<code>propext</code>, <code>Classical.choice</code> and <code>Quot.sound</code>. No declaration in the development carries a
+<code>sorry</code>, so no theorem reports <code>sorryAx</code>.</strong></p>
 <p><strong>Proof status, in four lines.</strong></p>
 <ul>
 <li><strong>Main theorem</strong> (§3): proved from Lean's three standard Mathlib axioms and the single
