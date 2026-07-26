@@ -36,10 +36,10 @@ Lean 4 kernel against Mathlib. Its list of assumptions contains <code>propext</c
 <p>The Connes Embedding Problem has had a negative answer since Ji–Natarajan–Vidick–Wright–Yuen
 proved MIP*=RE in 2020. The decisive argument is a construction about interactive proof
 systems, probabilistically checkable proofs and recursion theory. Its operator-algebraic
-consequence reaches the subject through the Kirchberg and Tsirelson correspondences,
-synchronous game algebras, amenable traces and u.c.p. lifting — and that passage has not been
-written out in a form where each step can be checked independently of the complexity-theoretic
-construction.</p>
+consequence reaches the subject through a long chain of equivalences — the Kirchberg and
+Tsirelson correspondences, synchronous game algebras, amenable traces, u.c.p. lifting — and that
+chain has not been written out in a form where each step can be checked independently of the
+complexity-theoretic construction.</p>
 <p>This development addresses that in three specific ways.</p>
 <p><strong>The operator-algebraic implication is checkable in full.</strong> Every step from the premise to the
 non-embeddable tracial state — the dilation and lifting arguments, finite-dimensional
@@ -89,7 +89,7 @@ rather than a matter of assurance:</p>
 <th></th>
 <th>Verified</th>
 <th>Assumed</th>
-<th>Open</th>
+<th>Unfinished (<code>sorryAx</code>)</th>
 </tr>
 </thead>
 <tbody>
@@ -97,19 +97,19 @@ rather than a matter of assurance:</p>
 <td><strong>Main theorem</strong> (§3)</td>
 <td>the whole implication</td>
 <td>one domain-specific premise</td>
-<td>nothing — its list contains no <code>sorryAx</code></td>
+<td><strong>none</strong></td>
 </tr>
 <tr>
 <td><strong>Complexity-free routes</strong> (§4)</td>
 <td>the implications themselves, at the ambient logic</td>
-<td>nothing; every open input is a hypothesis</td>
-<td>nothing — no <code>sorry</code>, so no <code>sorryAx</code></td>
+<td>nothing — every open input is a hypothesis in the signature</td>
+<td><strong>none</strong></td>
 </tr>
 <tr>
 <td><strong>Spectral truncations</strong> (§7)</td>
 <td>the finite-stage CQMS structure</td>
 <td>nothing beyond the ambient logic</td>
-<td>nothing</td>
+<td><strong>none</strong></td>
 </tr>
 </tbody>
 </table>
